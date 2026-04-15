@@ -1,5 +1,5 @@
 networks:
-  apigo_network:
+  fdo_network:
     driver: bridge
 
 volumes:
@@ -17,7 +17,7 @@ services:
       db:
         condition: service_healthy
     networks:
-      - apigo_network
+      - fdo_network
 
   nginx:
     build:
@@ -31,7 +31,7 @@ services:
     environment:
       - NGINX_SERVER_NAME
     networks:
-      - apigo_network
+      - fdo_network
 
   db:
     image: mysql:8.0
@@ -43,7 +43,7 @@ services:
       - MYSQL_HOST
       - MYSQL_PORT
     networks:
-      - apigo_network
+      - fdo_network
     healthcheck:
       test: >
         mysqladmin ping
@@ -73,7 +73,7 @@ services:
       - MYSQL_PORT
       - MYSQL_HOST
     networks:
-      - apigo_network
+      - fdo_network
     volumes:
       - ./db/migrations:/migrations
     entrypoint: >
