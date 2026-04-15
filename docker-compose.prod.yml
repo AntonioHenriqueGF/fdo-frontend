@@ -1,0 +1,21 @@
+# Docker Compose para ambiente de produção
+# Este arquivo é utilizado para configurar os serviços que compõem a aplicação em um ambiente de produção
+# Roda apenas quando o usuário especifica "docker-compose -f docker-compose.yml -f docker-compose.prod.yml up"
+
+services:
+  nginx:
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/templates:/etc/nginx/templates
+      - ./certbot/www:/var/www/certbot
+      - certbot-etc:/etc/letsencrypt
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    networks:
+      - apigo_network

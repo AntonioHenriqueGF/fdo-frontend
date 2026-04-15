@@ -1,0 +1,85 @@
+networks:
+  apigo_network:
+    driver: bridge
+
+volumes:
+  # O padrão proficional de persistência é por bind mount, mas para facilitar o uso em ambientes de desenvolvimento
+  # e testes que rodam em Windows, utilizamos um "volume nomeado" gerenciado pelo Docker.
+  db_data:
+  certbot-etc:
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - apigo_network
+
+  nginx:
+    build:
+      context: .
+      dockerfile: ./nginx/nginx.dockerfile
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - NGINX_SERVER_NAME
+    networks:
+      - apigo_network
+
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      - MYSQL_USER
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE
+      - MYSQL_HOST
+      - MYSQL_PORT
+    networks:
+      - apigo_network
+    healthcheck:
+      test: >
+        mysqladmin ping
+        -h "$MYSQL_HOST"
+        -P "$MYSQL_PORT"
+        -u "$MYSQL_USER"
+        -p"$MYSQL_ROOT_PASSWORD"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    volumes:
+      - db_data:/var/lib/mysql
+    # Exemplo de bind mount para persistência local:
+    # - /srv/apigo/volumes/mysql:/var/lib/mysql
+    # Obs: Ao utilizar bind mount em Windows, certifique-se de que o diretório existe e possui as permissões corretas.
+  
+  migrate:
+    image: migrate/migrate
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - MYSQL_USER
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE
+      - MYSQL_PORT
+      - MYSQL_HOST
+    networks:
+      - apigo_network
+    volumes:
+      - ./db/migrations:/migrations
+    entrypoint: >
+      migrate
+      -path /migrations
+      -database "mysql://$MYSQL_USER:$MYSQL_ROOT_PASSWORD@tcp($MYSQL_HOST:$MYSQL_PORT)/$MYSQL_DATABASE"
+    command: up
+    # Este serviço é projetado para ser executado uma única vez para aplicar as migrações. Ele pode ser removido 
+    # ou comentado após a execução inicial.

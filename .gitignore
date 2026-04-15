@@ -1,0 +1,27 @@
+# Binaries
+
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Test Binary
+
+*.test
+
+# Coverage
+
+*.out
+
+# Environment
+
+.env
+
+# Certbot
+
+certbot/
+
+# Others
+
+node_modules/
+dist/
