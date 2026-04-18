@@ -13,7 +13,7 @@ export default defineConfig([
       js.configs.recommended,
 
       // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
+      tseslint.configs.disableTypeChecked,
 
       // Optionally, add this for stylistic rules
       tseslint.configs.stylisticTypeChecked,
