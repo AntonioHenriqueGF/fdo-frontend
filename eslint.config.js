@@ -11,7 +11,7 @@ export default defineConfig([
   {
     files: ['**/*.{ts,tsx}'],
     plugins: {
-      '@stylistic': stylistic,
+      // '@stylistic': stylistic,
       'react-hooks': reactHooks,
     },
     extends: [
@@ -39,8 +39,6 @@ export default defineConfig([
         'warn',
         { allowConstantExport: true },
       ],
-      '@stylistic/comma-dangle': ['error', 'always-multiline'],
-      '@stylistic/semi': ['error', 'always'],
       "react-hooks/exhaustive-deps": 'warn',
     },
   },

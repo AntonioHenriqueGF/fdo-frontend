@@ -5,7 +5,7 @@ import {
   headerLineSelectedSpreadAtom,
 } from "../../atoms/importAtoms";
 import { numericToAlfabeticColumnIndex } from "./Props";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { GridWrapper } from "./styles";
 
 export const PreviewGrid: React.FC = () => {
@@ -31,22 +31,25 @@ export const PreviewGrid: React.FC = () => {
     );
   }, [csvImport]);
 
+  const headerDataRowDecider = useCallback((rowIndex: number) => {
+    if (rowIndex === headerLineSelected - 1) {
+      return "header-row";
+    } else if (rowIndex === dataStartLineSelected - 1) {
+      return "data-row";
+    }
+    return "";
+  }, [headerLineSelected, dataStartLineSelected]);
+
   const firstRowsPreview = useMemo(() => {
     if (!csvImport || csvImport.data.length === 0) {
       return <></>;
     }
 
     return csvImport?.data.slice(0, 30).map((row, rowIndex) => (
-      <tr key={rowIndex}>
+      <tr key={rowIndex}
+        className={headerDataRowDecider(rowIndex)}>
         <td
           key={`index_${rowIndex}`}
-          className={
-            rowIndex === headerLineSelected - 1
-              ? "header-row"
-              : rowIndex === dataStartLineSelected - 1
-                ? "data-row"
-                : ""
-          }
         >
           {rowIndex + 1}
         </td>
@@ -60,7 +63,7 @@ export const PreviewGrid: React.FC = () => {
         ))}
       </tr>
     ));
-  }, [csvImport, headerLineSelected, dataStartLineSelected]);
+  }, [csvImport, headerDataRowDecider]);
 
   // Renderiza uma tabela com os dados do csvImport.data (string[][])
   return (

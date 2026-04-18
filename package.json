@@ -17,7 +17,6 @@
     "@mui/icons-material": "^9.0.0",
     "@mui/material": "^9.0.0",
     "@mui/styled-engine-sc": "^9.0.0",
-    "@stylistic/eslint-plugin": "^5.10.0",
     "jotai": "^2.19.1",
     "papaparse": "^5.5.3",
     "react": "^19.2.4",
@@ -27,6 +26,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
+    "@stylistic/eslint-plugin": "^5.10.0",
     "@types/node": "^24.12.2",
     "@types/papaparse": "^5.5.2",
     "@types/react": "^19.2.14",

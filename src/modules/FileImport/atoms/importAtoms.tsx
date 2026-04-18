@@ -24,7 +24,7 @@ export const dataStartLineSelectedSpreadAtom = atom(
     set(dataStartLineSelectedAtom, newData);
 });
 
-export const deleteAtom = atom(
+export const deleteFileImportAtom = atom(
   (get) => get(csvImportRawAtom),
   (_get, set) => {
     set(csvImportRawAtom, null);
