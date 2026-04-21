@@ -1,5 +1,5 @@
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { useState } from "react";
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { useState } from 'react';
 
 interface DataTypeDeciderProps {
   colName: string;
@@ -8,21 +8,21 @@ interface DataTypeDeciderProps {
 }
 
 export const DataTypeDecider: React.FC<DataTypeDeciderProps> = ({ colName, onTypeSelected, identifier }) => {
-  const [dataType, setDataType] = useState("");
+  const [dataType, setDataType] = useState('');
   const handleChange = (
     event:
       | React.ChangeEvent<
-          Omit<HTMLInputElement, "value"> & {
+          Omit<HTMLInputElement, 'value'> & {
             value: string;
           },
           Element
-        >
+      >
       | (Event & {
-          target: {
-            value: string;
-            name: string;
-          };
-        }),
+        target: {
+          value: string;
+          name: string;
+        };
+      }),
   ) => {
     setDataType(event.target.value);
     onTypeSelected(colName, event.target.value);

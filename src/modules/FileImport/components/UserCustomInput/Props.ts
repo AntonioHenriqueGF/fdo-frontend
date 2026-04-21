@@ -4,13 +4,13 @@
  * @return The index of the estimated header row, or 1 if no such row is found. The index is 1-based, meaning the first row is considered row 1.
  */
 export const estimateHeaders = (data: string[][]): number => {
-    for (let i = 0; i < Math.min(30, data.length); i++) {
-        const row = data[i];
-        if (row.every(cell => cell !== undefined && cell !== null && cell.trim() !== "")) {
-            return i + 1; // Return 1-based index
-        }
+  for (let i = 0; i < Math.min(30, data.length); i++) {
+    const row = data[i];
+    if (row.every(cell => cell !== undefined && cell !== null && cell.trim() !== '')) {
+      return i + 1; // Return 1-based index
     }
-    return 1; // Default to 1 if no header row is found
+  }
+  return 1; // Default to 1 if no header row is found
 };
 
 /**
@@ -20,11 +20,11 @@ export const estimateHeaders = (data: string[][]): number => {
  * @return The index of the estimated data start line, or headerLine + 1 if no such row is found. The index is 1-based.
  */
 export const estimateDataStartLine = (data: string[][], headerLine: number): number => {
-    for (let i = headerLine; i < Math.min(headerLine + 30, data.length); i++) {
-        const row = data[i];
-        if (row.filter(cell => cell !== undefined && cell !== null && cell.trim() !== "").length >= 3) {
-            return i + 1; // Return 1-based index
-        }
+  for (let i = headerLine; i < Math.min(headerLine + 30, data.length); i++) {
+    const row = data[i];
+    if (row.filter(cell => cell !== undefined && cell !== null && cell.trim() !== '').length >= 3) {
+      return i + 1; // Return 1-based index
     }
-    return headerLine + 1; // Default to the line immediately after the header if no data start line is found
+  }
+  return headerLine + 1; // Default to the line immediately after the header if no data start line is found
 };

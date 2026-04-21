@@ -1,12 +1,12 @@
-import { useAtom } from "jotai";
+import { useAtom } from 'jotai';
 import {
   csvImportAddSpreadAtom,
   dataStartLineSelectedSpreadAtom,
   headerLineSelectedSpreadAtom,
-} from "../../atoms/importAtoms";
-import { numericToAlfabeticColumnIndex } from "./Props";
-import { useCallback, useMemo } from "react";
-import { GridWrapper } from "./styles";
+} from '../../atoms/importAtoms';
+import { numericToAlfabeticColumnIndex } from './Props';
+import { useCallback, useMemo } from 'react';
+import { GridWrapper } from './styles';
 
 export const PreviewGrid: React.FC = () => {
   const [csvImport] = useAtom(csvImportAddSpreadAtom);
@@ -33,11 +33,11 @@ export const PreviewGrid: React.FC = () => {
 
   const headerDataRowDecider = useCallback((rowIndex: number) => {
     if (rowIndex === headerLineSelected - 1) {
-      return "header-row";
+      return 'header-row';
     } else if (rowIndex === dataStartLineSelected - 1) {
-      return "data-row";
+      return 'data-row';
     }
-    return "";
+    return '';
   }, [headerLineSelected, dataStartLineSelected]);
 
   const firstRowsPreview = useMemo(() => {

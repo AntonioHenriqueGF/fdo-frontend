@@ -35,11 +35,12 @@ export default function CSVReader() {
 
   const [, setCsvImport] = useAtom(csvImportAddSpreadAtom);
 
-  const handleUploadAccepted = useCallback((results: RawImport) => {
+  const handleUploadAccepted = useCallback((results: RawImport, file: File) => {
+    if (file.type !== 'text/csv' && !file.name.endsWith('.csv')) {
+      alert('Please upload a valid CSV file.');
+      return;
+    }
     setCsvImport(results);
-    console.log('---------------------------');
-    console.log(results);
-    console.log('---------------------------');
   }, [setCsvImport]);
 
   // Handle the removal here
@@ -49,6 +50,7 @@ export default function CSVReader() {
   return (
     <CSVReader
       onUploadAccepted={handleUploadAccepted}
+      accept=".csv, text/csv"
     >
       {({
         getRootProps,

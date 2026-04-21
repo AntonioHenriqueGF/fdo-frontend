@@ -11,14 +11,14 @@ export default defineConfig([
   {
     files: ['**/*.{ts,tsx}'],
     plugins: {
-      // '@stylistic': stylistic,
+      '@stylistic': stylistic,
       'react-hooks': reactHooks,
     },
     extends: [
-      js.configs.recommended,
+      // js.configs.recommended,
 
       // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.disableTypeChecked,
+      tseslint.configs.eslintRecommended,
 
       // Optionally, add this for stylistic rules
       tseslint.configs.stylisticTypeChecked,
@@ -40,6 +40,12 @@ export default defineConfig([
         { allowConstantExport: true },
       ],
       "react-hooks/exhaustive-deps": 'warn',
+        '@stylistic/indent': ['error', 2],
+        '@stylistic/quotes': ['error', 'single'],
+        '@stylistic/semi': ['error', 'always'],
+        '@stylistic/comma-dangle': ['error', 'always-multiline'],
+        '@stylistic/space-before-function-paren': ['error', 'never'],
+        '@stylistic/keyword-spacing': ['error', { before: true, after: true }],
     },
   },
 ])
