@@ -1,10 +1,10 @@
-import { FileImportView } from './modules/FileImport/view';
+import { RouterProvider } from 'react-router';
+import { router } from './routes';
 
 function App() {
   return (
     <>
-      <h1>FDO - Financial Data Overview</h1>
-      <FileImportView />
+      <RouterProvider router={router} />
     </>
   );
 }
