@@ -3,7 +3,8 @@ import { useCallback, type CSSProperties } from 'react';
 
 import { useCSVReader } from 'react-papaparse';
 import { csvImportAddSpreadAtom } from '../../atoms/importAtoms';
-import type { RawImport } from '../../models/RawImport';
+import type { RawImport } from '../../interfaces/RawImport';
+import { CSVReaderWrapper } from './styles';
 
 const styles = {
   csvReader: {
@@ -48,37 +49,39 @@ export default function CSVReader() {
     setCsvImport(null);
   }, [setCsvImport]);
   return (
-    <CSVReader
-      onUploadAccepted={handleUploadAccepted}
-      accept=".csv, text/csv"
-    >
-      {({
-        getRootProps,
-        acceptedFile,
-        ProgressBar,
-        getRemoveFileProps,
-      }: any) => (
-        <>
-          <div style={styles.csvReader}>
-            <button type='button' {...getRootProps()} style={styles.browseFile}>
-              Browse file
-            </button>
-            <div style={styles.acceptedFile}>
-              {acceptedFile?.name}
+    <CSVReaderWrapper>
+      <CSVReader
+        onUploadAccepted={handleUploadAccepted}
+        accept=".csv, text/csv"
+      >
+        {({
+          getRootProps,
+          acceptedFile,
+          ProgressBar,
+          getRemoveFileProps,
+        }: any) => (
+          <>
+            <div style={styles.csvReader}>
+              <button type='button' {...getRootProps()} style={styles.browseFile}>
+                Browse file
+              </button>
+              <div style={styles.acceptedFile}>
+                {acceptedFile?.name}
+              </div>
+              <button {...getRemoveFileProps()} style={styles.remove} onClick={(event: Event) => {
+                handleRemoveFile();
+                const removeProps = getRemoveFileProps();
+                if (removeProps?.onClick) {
+                  removeProps.onClick(event);
+                }
+              }}>
+                Remove
+              </button>
             </div>
-            <button {...getRemoveFileProps()} style={styles.remove} onClick={(event: Event) => {
-              handleRemoveFile();
-              const removeProps = getRemoveFileProps();
-              if (removeProps?.onClick) {
-                removeProps.onClick(event);
-              }
-            }}>
-              Remove
-            </button>
-          </div>
-          <ProgressBar style={styles.progressBarBackgroundColor} />
-        </>
-      )}
-    </CSVReader>
+            <ProgressBar style={styles.progressBarBackgroundColor} />
+          </>
+        )}
+      </CSVReader>
+    </CSVReaderWrapper>
   );
 }
