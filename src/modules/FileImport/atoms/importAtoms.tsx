@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { type RawImport } from '../models/RawImport';
+import { type RawImport } from '../interfaces/RawImport';
 import type { SetStateAction } from 'jotai';
 
 export const csvImportRawAtom = atom<RawImport | null>(null);
