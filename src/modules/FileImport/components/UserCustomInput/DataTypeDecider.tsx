@@ -1,10 +1,11 @@
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { useState } from 'react';
+import type { DataType } from '../../interfaces/IParsingProfile';
 
 interface DataTypeDeciderProps {
   colName: string;
-  onTypeSelected: (colName: string, dataType: string) => void;
-  identifier: string | number;
+  onTypeSelected: (dataType: DataType, index: number) => void;
+  identifier: number;
 }
 
 export const DataTypeDecider: React.FC<DataTypeDeciderProps> = ({ colName, onTypeSelected, identifier }) => {
@@ -25,7 +26,7 @@ export const DataTypeDecider: React.FC<DataTypeDeciderProps> = ({ colName, onTyp
       }),
   ) => {
     setDataType(event.target.value);
-    onTypeSelected(colName, event.target.value);
+    onTypeSelected((event.target.value || 'ignore') as DataType, identifier);
   };
   return (
     <FormControl fullWidth size="small" key={`form-control-${identifier}`}>
@@ -38,7 +39,7 @@ export const DataTypeDecider: React.FC<DataTypeDeciderProps> = ({ colName, onTyp
         label={colName}
         onChange={handleChange}
       >
-        <MenuItem value="">
+        <MenuItem value="ignore" defaultChecked>
           <em>Ignore</em>
         </MenuItem>
         <MenuItem value="date_mmddyyyy">Date (MM/DD/YYYY)</MenuItem>

@@ -3,6 +3,8 @@ import { type RawImport } from '../interfaces/RawImport';
 import type { SetStateAction } from 'jotai';
 
 export const csvImportRawAtom = atom<RawImport | null>(null);
+export const fileImportNameAtom = atom<string>('');
+export const fileImportHashAtom = atom<string>('');
 export const headerLineSelectedAtom = atom<number>(1);
 export const dataStartLineSelectedAtom = atom<number>(2);
 

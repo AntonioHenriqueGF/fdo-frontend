@@ -18,6 +18,7 @@
     "@mui/material": "^9.0.0",
     "@mui/styled-engine-sc": "^9.0.0",
     "jotai": "^2.19.1",
+    "notistack": "^3.0.2",
     "papaparse": "^5.5.3",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
