@@ -8,6 +8,8 @@ import { estimateHeaders, estimateDataStartLine } from './Props';
 import type { DataType } from '../../interfaces/IParsingProfile';
 import { Button } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
+import { normalizeData, validateProfile } from '../../utils/dataNormalization';
+import { useSnackbar } from 'notistack';
 
 export const UserCustomInput: React.FC = () => {
   const [headerLineSelected, setHeaderLineSelected] = useAtom(headerLineSelectedSpreadAtom);
@@ -15,6 +17,7 @@ export const UserCustomInput: React.FC = () => {
   const [dataTypePicked, setDataTypePicked] = useState<Record<DataType, number>>({} as Record<DataType, number>);
     
   const [csvImport] = useAtom(csvImportAddSpreadAtom);
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     const estimatedHeader = estimateHeaders(csvImport?.data ?? []);
@@ -26,6 +29,33 @@ export const UserCustomInput: React.FC = () => {
   const handleTypeSelected = useCallback((dataType: DataType, index: number) => {
     setDataTypePicked((prev) => ({ ...prev, [dataType as DataType]: index }));
   }, [setDataTypePicked]);
+
+  const handleSubmit = useCallback(() => {
+    // Here you would typically validate the dataTypePicked to ensure all required types are selected
+    // and then proceed to normalize the data using the selected header line, data start line, and column type mappings.
+    try {
+      const columnMapping = Object.entries(dataTypePicked).map(([dataType, columnIndex]) => ({
+        dataType: dataType as DataType,
+        columnIndex,
+      }));
+      if (!csvImport?.data) {
+        throw new Error('No CSV data available for processing.');
+      }
+
+      if (!validateProfile({
+        dataLine: dataStartLineSelected,
+        columnTypeMappings: columnMapping,
+      })) {
+        return;
+      }
+      console.log(normalizeData(csvImport?.data, {
+        dataLine: dataStartLineSelected,
+        columnTypeMappings: columnMapping,
+      }));
+    } catch(error) {
+      enqueueSnackbar((error as Error).message || 'Error validation fields', { variant: 'error' });
+    }
+  }, [dataTypePicked, dataStartLineSelected, csvImport?.data, enqueueSnackbar]);
 
   const headerRow = useMemo(() => {
     if (!csvImport || csvImport.data.length === 0) {
@@ -55,8 +85,8 @@ export const UserCustomInput: React.FC = () => {
     <NumberField min={1} max={30} size="small" label="Data start line" value={dataStartLineSelected} onValueChange={(value) => setDataStartLineSelected(value ?? 1)} />
     <div className="info-text">* Line numbers are 1-based, meaning the first line is considered line 1.</div>
     {dataDecider}
-    <Button variant="contained" endIcon={<SendIcon />}>
-      Send
+    <Button variant="contained" endIcon={<SendIcon />} onClick={handleSubmit}>
+      Submit
     </Button>
   </UserCustomInputWrapper>);
 };
