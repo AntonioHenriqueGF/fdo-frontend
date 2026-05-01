@@ -3,6 +3,7 @@ import { router } from './routes';
 import { SnackbarProvider } from 'notistack';
 
 import './styles/fonts.css';
+import './styles/global.css';
 
 function App() {
   return (
