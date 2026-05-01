@@ -40,5 +40,6 @@ export const ContentWrapper = styled.div`
     .page-content {
         margin: 10px;
         width: 100%;
+        height: calc(100vh - 89px);
     }
 `;
