@@ -3,7 +3,8 @@ import styled from 'styled-components';
 export const SidebarWrapper = styled.aside<{ $isOpen: boolean }>`
     width: ${({ $isOpen }) => ($isOpen ? '250px' : '44px')};
     padding: 10px;
-    transition: width var(--standard-transition); /* Smooth transition */
+    transition: width var(--standard-transition), left var(--standard-transition); /* Smooth transition */
+    background-color: var(--background-color);
 
     a, div {
         display: flex;
@@ -37,5 +38,14 @@ export const SidebarWrapper = styled.aside<{ $isOpen: boolean }>`
                 color: var(--active-text-color);
             }
         }
+    }
+
+    @media (max-width: 600px) {
+        position: absolute;
+        overflow: hidden;
+        z-index: 1000;
+        height: calc(100vh - 159px);
+        padding: 10px;
+        left: ${({ $isOpen }) => ($isOpen ? '0' : '-64px')};
     }
 `;

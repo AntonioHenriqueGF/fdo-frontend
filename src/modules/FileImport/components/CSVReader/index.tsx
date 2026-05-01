@@ -10,6 +10,7 @@ import { CSVReaderWrapper } from './styles';
 import { useSnackbar } from 'notistack';
 import { generateHashFromFile } from './Props';
 import { Button } from '@mui/material';
+import { scanVar } from '../../../../utils/ScanVar';
 
 const styles = {
   csvReader: {
@@ -100,7 +101,7 @@ export default function CSVReader() {
                   Remove
                 </Button>)}
             </div>
-            <ProgressBar style={styles.progressBarBackgroundColor} />
+            {scanVar(<ProgressBar style={styles.progressBarBackgroundColor} />)}
           </>
         )}
       </CSVReader>

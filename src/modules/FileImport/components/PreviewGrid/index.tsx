@@ -6,7 +6,7 @@ import {
 } from '../../atoms/importAtoms';
 import { numericToAlfabeticColumnIndex } from './Props';
 import { useCallback, useMemo } from 'react';
-import { GridWrapper } from './styles';
+import { GridContainer, GridWrapper } from './styles';
 
 export const PreviewGrid: React.FC = () => {
   const [csvImport] = useAtom(csvImportAddSpreadAtom);
@@ -65,11 +65,12 @@ export const PreviewGrid: React.FC = () => {
     ));
   }, [csvImport, headerDataRowDecider]);
 
-  // Renderiza uma tabela com os dados do csvImport.data (string[][])
   return (
-    <GridWrapper>
-      <thead>{headers}</thead>
-      <tbody>{firstRowsPreview}</tbody>
-    </GridWrapper>
+    <GridContainer>
+      <GridWrapper>
+        <thead>{headers}</thead>
+        <tbody>{firstRowsPreview}</tbody>
+      </GridWrapper>
+    </GridContainer>
   );
 };

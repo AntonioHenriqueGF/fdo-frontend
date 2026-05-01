@@ -5,5 +5,5 @@ export const ContentPadStyle = styled.div`
     border-radius: 8px;
     padding: 20px;
 
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
 `;

@@ -22,14 +22,18 @@ export const HeaderWrapper = styled.header`
     }
 
     @media (max-width: 600px) {
-        margin-top: 20px;
         flex-direction: column;
         text-align: center;
-        gap: 0px;
+        gap: 10px;
 
-        svg {
+        .logo-icon {
             width: 60px;
             height: 60px;
+        }
+
+        button {
+            position: absolute;
+            left: 10px;
         }
     }
 `;
