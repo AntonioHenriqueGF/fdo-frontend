@@ -9,7 +9,7 @@ export const SidebarWrapper = styled.aside<{ $isOpen: boolean }>`
         display: flex;
         align-items: center;
         gap: 10px;
-        margin-bottom: 15px;
+        margin-bottom: 10px;
 
         text-decoration: none;
         color: var(--standard-text-color);
@@ -25,6 +25,17 @@ export const SidebarWrapper = styled.aside<{ $isOpen: boolean }>`
             color: var(--hover-text-color);
 
             background-color: var(--hover-background-color);
+        }
+
+        &.active {
+            color: var(--active-text-color);
+            background-color: var(--active-background-color);
+
+            &:hover {
+                cursor: default;
+                background-color: var(--active-background-color);
+                color: var(--active-text-color);
+            }
         }
     }
 `;

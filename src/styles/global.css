@@ -9,8 +9,11 @@ body {
     --background-color: #ecf1f7;
     --standard-font-family: 'Inter', sans-serif;
     --standard-text-color: #333;
-    --hover-text-color: #396182;
+    --hover-text-color: #3e6087;
     --hover-background-color: #d7e0ed;
+
+    --active-text-color: #d7e0ed;
+    --active-background-color: #3e6087;
 
     --standard-transition: 0.3s ease;
     --action-button-color: #245b8f;
