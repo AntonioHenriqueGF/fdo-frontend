@@ -5,7 +5,7 @@ export const SidebarWrapper = styled.aside<{ $isOpen: boolean }>`
     padding: 10px;
     transition: width var(--standard-transition); /* Smooth transition */
 
-    a {
+    a, div {
         display: flex;
         align-items: center;
         gap: 10px;
