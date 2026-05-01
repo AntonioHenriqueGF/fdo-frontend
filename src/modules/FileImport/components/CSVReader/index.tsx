@@ -9,26 +9,32 @@ import { CSVReaderWrapper } from './styles';
 
 import { useSnackbar } from 'notistack';
 import { generateHashFromFile } from './Props';
+import { Button } from '@mui/material';
 
 const styles = {
   csvReader: {
     display: 'flex',
     flexDirection: 'row',
+    justifyItems: 'center',
     marginBottom: 10,
+    fontFamily: 'var(--standard-font-family)',
   } as CSSProperties,
   browseFile: {
-    width: '20%',
+    width: '224px',
+    fontFamily: 'var(--standard-font-family)',
+    backgroundColor: 'var(--action-button-color)',
   } as CSSProperties,
   acceptedFile: {
-    border: '1px solid #ccc',
-    height: 45,
     lineHeight: 2.5,
     paddingLeft: 10,
-    width: '80%',
+    marginRight: 'auto',
+    display: 'flex',
+    alignItems: 'center',
+    fontFamily: 'var(--standard-font-family)',
   } as CSSProperties,
   remove: {
-    borderRadius: 0,
     padding: '0 20px',
+    fontFamily: 'var(--standard-font-family)',
   } as CSSProperties,
   progressBarBackgroundColor: {
     backgroundColor: 'red',
@@ -77,21 +83,22 @@ export default function CSVReader() {
         }: any) => (
           <>
             <div style={styles.csvReader}>
-              <button type='button' {...getRootProps()} style={styles.browseFile}>
+              <Button variant="contained" size="medium" type='button' {...getRootProps()} style={styles.browseFile}>
                 Browse file
-              </button>
+              </Button>
               <div style={styles.acceptedFile}>
                 {acceptedFile?.name}
               </div>
-              <button {...getRemoveFileProps()} style={styles.remove} onClick={(event: Event) => {
-                handleRemoveFile();
-                const removeProps = getRemoveFileProps();
-                if (removeProps?.onClick) {
-                  removeProps.onClick(event);
-                }
-              }}>
-                Remove
-              </button>
+              {acceptedFile?.name && (
+                <Button variant="contained" size="medium" type='button' color='error' {...getRemoveFileProps()} style={styles.remove} onClick={(event: Event) => {
+                  handleRemoveFile();
+                  const removeProps = getRemoveFileProps();
+                  if (removeProps?.onClick) {
+                    removeProps.onClick(event);
+                  }
+                }}>
+                  Remove
+                </Button>)}
             </div>
             <ProgressBar style={styles.progressBarBackgroundColor} />
           </>
