@@ -37,8 +37,10 @@ const styles = {
     padding: '0 20px',
     fontFamily: 'var(--standard-font-family)',
   } as CSSProperties,
-  progressBarBackgroundColor: {
+  progressBar: {
     backgroundColor: 'red',
+    height: '5px',
+    position: 'absolute',
   } as CSSProperties,
 };
 
@@ -76,24 +78,19 @@ export default function CSVReader() {
         onUploadAccepted={handleUploadAccepted}
         accept=".csv, text/csv"
       >
-        {({
-          getRootProps,
-          acceptedFile,
-          ProgressBar,
-          getRemoveFileProps,
-        }: any) => (
+        {(props: any) => (
           <>
             <div style={styles.csvReader}>
-              <Button variant="contained" size="medium" type='button' {...getRootProps()} style={styles.browseFile}>
+              <Button variant="contained" size="medium" type='button' {...props.getRootProps()} style={styles.browseFile}>
                 Browse file
               </Button>
               <div style={styles.acceptedFile}>
-                {acceptedFile?.name}
+                {scanVar(props).acceptedFile?.name}
               </div>
-              {acceptedFile?.name && (
-                <Button variant="contained" size="medium" type='button' color='error' {...getRemoveFileProps()} style={styles.remove} onClick={(event: Event) => {
+              {props.acceptedFile?.name && (
+                <Button variant="contained" size="medium" type='button' color='error' {...props.getRemoveFileProps()} style={styles.remove} onClick={(event: Event) => {
                   handleRemoveFile();
-                  const removeProps = getRemoveFileProps();
+                  const removeProps = props.getRemoveFileProps();
                   if (removeProps?.onClick) {
                     removeProps.onClick(event);
                   }
@@ -101,7 +98,6 @@ export default function CSVReader() {
                   Remove
                 </Button>)}
             </div>
-            {scanVar(<ProgressBar style={styles.progressBarBackgroundColor} />)}
           </>
         )}
       </CSVReader>
