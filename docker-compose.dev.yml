@@ -12,19 +12,22 @@ services:
   api:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
+    networks:
+      - fdo_network
+    ports:
+      - "8080:8080"
+
+  nginx:
+    build:
+      context: .
+      dockerfile: ./nginx/nginx.dockerfile
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/conf.d/dev.conf:/etc/nginx/conf.d/default.conf
+    environment:
+      - NGINX_SERVER_NAME
     networks:
       - fdo_network
     ports:
       - "80:80"
-
-  # nginx:
-  #   build:
-  #     context: .
-  #     dockerfile: ./nginx/nginx.dockerfile
-  #   volumes:
-  #     - ./nginx/conf.d:/etc/nginx/conf.d
-  #   environment:
-  #     - NGINX_SERVER_NAME
-  #   networks:
-  #     - fdo_network

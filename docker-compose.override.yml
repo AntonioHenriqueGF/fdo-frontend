@@ -2,12 +2,12 @@
 # Ele é utilizado para sobrescrever ou adicionar configurações específicas para o ambiente de desenvolvimento, sem afetar o ambiente de produção.
 
 services:
-  nginx:
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx/conf.d/dev.conf:/etc/nginx/conf.d/default.conf
+#   nginx:
+#     ports:
+#       - "80:80"
+#     volumes:
+#       - ./nginx/conf.d/dev.conf:/etc/nginx/conf.d/default.conf
 
   api:
     ports:
-      - "8080:8080"
+      - "80:80"
