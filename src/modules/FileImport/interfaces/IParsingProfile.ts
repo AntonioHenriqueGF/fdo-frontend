@@ -5,8 +5,7 @@ export type DataType = 'date_mmddyyyy'
     | 'amount' 
     | 'credit_only' 
     | 'debit_only' 
-    | 'closing_balance' 
-    | 'closing_balance_description' 
+    | 'closing_balance'
     | 'ignore';
 
 export interface IColumnTypeMapping {

@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai';
 import { NumberField } from '../../../../shared/components/NumberField';
-import { csvImportAddSpreadAtom, dataStartLineSelectedSpreadAtom, headerLineSelectedSpreadAtom } from '../../atoms/importAtoms';
+import { csvImportAddSpreadAtom, dataStartLineSelectedSpreadAtom, fileImportHashAtom, fileImportNameAtom, headerLineSelectedSpreadAtom } from '../../atoms/importAtoms';
 import { UserCustomInputWrapper } from './styles';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { DataTypeDecider } from './DataTypeDecider';
@@ -15,6 +15,8 @@ export const UserCustomInput: React.FC = () => {
   const [headerLineSelected, setHeaderLineSelected] = useAtom(headerLineSelectedSpreadAtom);
   const [dataStartLineSelected, setDataStartLineSelected] = useAtom(dataStartLineSelectedSpreadAtom);
   const [dataTypePicked, setDataTypePicked] = useState<Record<DataType, number>>({} as Record<DataType, number>);
+  const [fileName] = useAtom(fileImportNameAtom);
+  const [fileHash] = useAtom(fileImportHashAtom);
     
   const [csvImport] = useAtom(csvImportAddSpreadAtom);
   const { enqueueSnackbar } = useSnackbar();
@@ -48,14 +50,18 @@ export const UserCustomInput: React.FC = () => {
       })) {
         return;
       }
-      console.log(normalizeData(csvImport?.data, {
-        dataLine: dataStartLineSelected,
-        columnTypeMappings: columnMapping,
-      }));
+      console.log({
+        normalized: normalizeData(csvImport?.data, {
+          dataLine: dataStartLineSelected,
+          columnTypeMappings: columnMapping,
+        }),
+        fileName,
+        fileHash,
+      });
     } catch(error) {
       enqueueSnackbar((error as Error).message || 'Error validation fields', { variant: 'error' });
     }
-  }, [dataTypePicked, dataStartLineSelected, csvImport?.data, enqueueSnackbar]);
+  }, [dataTypePicked, dataStartLineSelected, fileName, fileHash, csvImport?.data, enqueueSnackbar]);
 
   const headerRow = useMemo(() => {
     if (!csvImport || csvImport.data.length === 0) {
@@ -81,7 +87,6 @@ export const UserCustomInput: React.FC = () => {
   }, [headerRow, handleTypeSelected]);
 
   return csvImport ? (<UserCustomInputWrapper>
-    
     <NumberField min={1} max={30} size="small" label="Header start line" value={headerLineSelected} onValueChange={(value) => setHeaderLineSelected(value ?? 1)} />
     <NumberField min={1} max={30} size="small" label="Data start line" value={dataStartLineSelected} onValueChange={(value) => setDataStartLineSelected(value ?? 1)} />
     <div className="info-text">* Line numbers are 1-based, meaning the first line is considered line 1.</div>

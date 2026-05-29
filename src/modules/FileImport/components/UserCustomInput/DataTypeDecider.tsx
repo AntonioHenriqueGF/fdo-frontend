@@ -52,9 +52,6 @@ export const DataTypeDecider: React.FC<DataTypeDeciderProps> = ({ colName, onTyp
         <MenuItem value="credit_only">Credit Only</MenuItem>
         <MenuItem value="debit_only">Debit Only</MenuItem>
         <MenuItem value="closing_balance">Closing Balance</MenuItem>
-        <MenuItem value="closing_balance_description">
-          Closing Balance Description
-        </MenuItem>
       </Select>
     </FormControl>
   );

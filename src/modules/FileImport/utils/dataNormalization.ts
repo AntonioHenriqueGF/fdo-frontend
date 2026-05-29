@@ -1,5 +1,7 @@
 import type { DataType, IParsingProfile } from '../interfaces/IParsingProfile';
 
+type NormalizedRow = Record<DataType, string | number | undefined>;
+
 /**
  * Converts a string formatted as "3.000,00" or "3,000.00" into a number.
  * 
@@ -59,13 +61,16 @@ export const validateProfile = (parsingProfile: IParsingProfile): boolean => {
   return true;
 };
 
-export const normalizeData = (rawData: string[][], parsingProfile: IParsingProfile): Record<DataType, string>[] => {
+export const normalizeData = (rawData: string[][], parsingProfile: IParsingProfile): NormalizedRow[] => {
   const { dataLine, columnTypeMappings } = parsingProfile;
 
-  const data = rawData.slice(dataLine - 1); // Convert 1-based index to 0-based
+  const lastRowEmpty = isLastRowEmpty(rawData);
+  console.log('Is last raw row all empty strings?', lastRowEmpty);
+
+  const data = rawData.slice(dataLine - 1, lastRowEmpty ? -1 : undefined); // Convert 1-based index to 0-based
   console.log('Raw Data:', rawData,'Data to be normalized:', data);
 
-  const normalizedData: Record<DataType, string>[] = [];
+  const normalizedData: NormalizedRow[] = [];
 
   const indexToDataTypeMap: Record<number, DataType> = {};
   columnTypeMappings.forEach(mapping => {
@@ -73,19 +78,14 @@ export const normalizeData = (rawData: string[][], parsingProfile: IParsingProfi
   });
 
   data.forEach(row => {
-    const normalizedRow: Record<DataType, string> = {
-      amount: '',
-      credit_only: '',
-      debit_only: '',
-      closing_balance: '',
-      closing_balance_description: '',
-      date_yyyymmdd: '',
-      description: '',
-    } as Record<DataType, string>;
+    const normalizedRow: NormalizedRow = {} as NormalizedRow;
     row.forEach((cell, index) => {
       const dataType = indexToDataTypeMap[index];
-      if ((dataType === 'amount' || dataType === 'credit_only' || dataType === 'debit_only') && cell) {
-        normalizedRow[dataType] = parseLocaleFloat(cell).toFixed(2);
+      if (cell?.length === 0) {
+        return;
+      }
+      if ((['amount', 'credit_only', 'debit_only', 'closing_balance'] as DataType[]).includes(dataType) && cell) {
+        normalizedRow[dataType] = parseFloat(parseLocaleFloat(cell).toFixed(2));
         return;
       }
       if (dataType === 'date_ddmmyyyy') {
@@ -111,4 +111,10 @@ export const normalizeData = (rawData: string[][], parsingProfile: IParsingProfi
   });
 
   return normalizedData;
+};
+
+export const isLastRowEmpty = (rawData: string[][]): boolean => {
+  if (!rawData || rawData.length === 0) return false;
+  const lastRow = rawData[rawData.length - 1];
+  return lastRow.every(cell => (cell ?? '').trim().length === 0);
 };

@@ -10,7 +10,6 @@ import { CSVReaderWrapper } from './styles';
 import { useSnackbar } from 'notistack';
 import { generateHashFromFile } from './Props';
 import { Button } from '@mui/material';
-import { scanVar } from '../../../../utils/ScanVar';
 
 const styles = {
   csvReader: {
@@ -85,7 +84,7 @@ export default function CSVReader() {
                 Browse file
               </Button>
               <div style={styles.acceptedFile}>
-                {scanVar(props).acceptedFile?.name}
+                {props.acceptedFile?.name}
               </div>
               {props.acceptedFile?.name && (
                 <Button variant="contained" size="medium" type='button' color='error' {...props.getRemoveFileProps()} style={styles.remove} onClick={(event: Event) => {
