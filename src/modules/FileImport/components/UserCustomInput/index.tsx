@@ -10,6 +10,8 @@ import { Button } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import { normalizeData, validateProfile } from '../../utils/dataNormalization';
 import { useSnackbar } from 'notistack';
+import { ApiRequest, type StandardApiResponse } from '../../../../Services/ApiRequest';
+import type { AxiosError } from 'axios';
 
 export const UserCustomInput: React.FC = () => {
   const [headerLineSelected, setHeaderLineSelected] = useAtom(headerLineSelectedSpreadAtom);
@@ -17,6 +19,8 @@ export const UserCustomInput: React.FC = () => {
   const [dataTypePicked, setDataTypePicked] = useState<Record<DataType, number>>({} as Record<DataType, number>);
   const [fileName] = useAtom(fileImportNameAtom);
   const [fileHash] = useAtom(fileImportHashAtom);
+
+  const [submitting, setSubmitting] = useState(false);
     
   const [csvImport] = useAtom(csvImportAddSpreadAtom);
   const { enqueueSnackbar } = useSnackbar();
@@ -58,6 +62,29 @@ export const UserCustomInput: React.FC = () => {
         fileName,
         fileHash,
       });
+
+      setSubmitting(true);
+      ApiRequest({
+        method: 'POST',
+        url: '/api/import',
+        data: {
+          normalized: normalizeData(csvImport?.data, {
+            dataLine: dataStartLineSelected,
+            columnTypeMappings: columnMapping,
+          }),
+          fileName,
+          fileHash,
+        },
+        callback: () => {          
+          enqueueSnackbar('File imported successfully', { variant: 'success' });
+        },
+        errorCallback: (error: AxiosError<StandardApiResponse<any>>) => {
+          enqueueSnackbar(error.response?.data.message ?? 'File import failed. Please try again.', { variant: 'error' });
+        },
+        finallyCallback: () => {
+          setSubmitting(false);
+        },
+      });
     } catch(error) {
       enqueueSnackbar((error as Error).message || 'Error validation fields', { variant: 'error' });
     }
@@ -91,7 +118,7 @@ export const UserCustomInput: React.FC = () => {
     <NumberField min={1} max={30} size="small" label="Data start line" value={dataStartLineSelected} onValueChange={(value) => setDataStartLineSelected(value ?? 1)} />
     <div className="info-text">* Line numbers are 1-based, meaning the first line is considered line 1.</div>
     {dataDecider}
-    <Button variant="contained" endIcon={<SendIcon />} onClick={handleSubmit}>
+    <Button variant="contained" endIcon={<SendIcon />} onClick={handleSubmit} disabled={submitting} loading={submitting}>
       Submit
     </Button>
   </UserCustomInputWrapper>) : null;
