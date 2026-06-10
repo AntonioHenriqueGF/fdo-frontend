@@ -3,7 +3,7 @@ import { Loading } from '../../../shared/components/Loading';
 
 const DashboardView = lazy(() => import('../views').then(module => ({ default: module.Dashboard })));
 
-export const DashboardViewComponent = () => {
+export const DashboardViewComponent: React.FC = () => {
   return (
     <Suspense fallback={<Loading />}>
       <DashboardView />

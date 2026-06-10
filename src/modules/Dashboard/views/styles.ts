@@ -6,7 +6,11 @@ export const HeaderWrapper = styled.header`
     gap: 20px;
     margin: 10px;
 
-    button {
+    * {
+        font-family: var(--standard-font-family);
+    }
+
+    .drawer-button {
         padding: 10px;
         color: var(--standard-text-color);
         &:hover {
@@ -21,6 +25,14 @@ export const HeaderWrapper = styled.header`
         margin: 10px 0;
     }
 
+    .logout-button {
+        position: absolute;
+        right: 10px;
+        margin: 10px;
+
+        font-weight: bold;
+    }
+
     @media (max-width: 600px) {
         flex-direction: column;
         text-align: center;
@@ -31,7 +43,7 @@ export const HeaderWrapper = styled.header`
             height: 60px;
         }
 
-        button {
+        .drawer-button {
             position: absolute;
             left: 10px;
         }

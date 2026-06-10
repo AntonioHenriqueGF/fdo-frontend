@@ -1,17 +1,35 @@
-import { Outlet } from 'react-router';
+import { Outlet, useNavigate } from 'react-router';
 
 import LogoIcon from '../../../assets/logo.svg?react';
 import { ContentWrapper, HeaderWrapper } from './styles';
 import { Sidebar } from '../components/Sidebar';
 import { DrawerButton } from '../components/DrawerButton';
+import { Button } from '@mui/material';
+import { useCallback } from 'react';
+import { ApiRequest } from '../../../Services/ApiRequest';
+import { useSnackbar } from 'notistack';
 
 export const Dashboard: React.FC = () => {
+  const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
+  const handleLogout = useCallback(() => {
+    ApiRequest({
+      url: '/api/logout',
+      method: 'POST',
+      callback: () => {
+        enqueueSnackbar('Logout successful', { variant: 'success' });
+        navigate('/login');
+      },
+    });
+  }, [enqueueSnackbar, navigate]);
+
   return (
     <>
       <HeaderWrapper>
         <DrawerButton />
         <LogoIcon width={45} height={45} title='Logo FDO' aria-label='logo' className='logo-icon' />
         <h1>FDO | Financial Data Overview</h1>
+        <Button variant="text" size="small" className='logout-button' onClick={handleLogout}>Logout</Button>
       </HeaderWrapper>
       <ContentWrapper>
         <Sidebar />

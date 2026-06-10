@@ -12,7 +12,7 @@ export const DrawerButton: React.FC = () => {
   };
 
   return (
-    <IconButton aria-label="Menu" color="inherit" onClick={handleMenuClick}>
+    <IconButton aria-label="Menu" color="inherit" className='drawer-button' onClick={handleMenuClick}>
       <MenuIcon />
     </IconButton>
   );

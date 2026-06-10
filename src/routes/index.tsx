@@ -1,13 +1,39 @@
-import { createBrowserRouter } from 'react-router';
+import { createBrowserRouter, redirect } from 'react-router';
 import { FileImportRoute } from '../modules/FileImport/routes';
 import { DashboardViewComponent } from '../modules/Dashboard/routes';
+import { LoginViewComponent } from '../modules/Login/routes';
+import { GlobalGuard } from '../modules/GlobalGuard';
+import { ApiRequest } from '../Services/ApiRequest';
 
 export const router = createBrowserRouter([
   {
-    path: '/dashboard',
-    element: <DashboardViewComponent />,
+    path: '/',
+    element: <GlobalGuard />,
     children: [
-      FileImportRoute,
+      {
+        path: '/dashboard',
+        element: <DashboardViewComponent />,
+        children: [
+          FileImportRoute,
+        ],
+        loader: async() => {
+          return ApiRequest({
+            method: 'GET',
+            url: '/api/me',
+            callback: (response) => {
+              console.log('User data loaded:', response.data);
+            },
+            errorCallback: () => {
+              console.log('User not authenticated, redirecting to login');
+              throw redirect('/login');
+            },
+          });
+        },
+      },
+      {
+        path: '/login',
+        element: <LoginViewComponent />,
+      },
     ],
   },
 ]);
