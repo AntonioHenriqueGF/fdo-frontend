@@ -1,7 +1,7 @@
 import { Outlet, useNavigate } from 'react-router';
 
 import LogoIcon from '../../../assets/logo.svg?react';
-import { ContentWrapper, HeaderWrapper } from './styles';
+import { ContentWrapper, headerStyles, HeaderWrapper } from './styles';
 import { Sidebar } from '../components/Sidebar';
 import { DrawerButton } from '../components/DrawerButton';
 import { Button } from '@mui/material';
@@ -29,7 +29,7 @@ export const Dashboard: React.FC = () => {
         <DrawerButton />
         <LogoIcon width={45} height={45} title='Logo FDO' aria-label='logo' className='logo-icon' />
         <h1>FDO | Financial Data Overview</h1>
-        <Button variant="text" size="small" className='logout-button' onClick={handleLogout}>Logout</Button>
+        <Button variant="text" size="small" className='logout-button' onClick={handleLogout} style={headerStyles.logoutButton}>Logout</Button>
       </HeaderWrapper>
       <ContentWrapper>
         <Sidebar />

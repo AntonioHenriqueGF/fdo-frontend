@@ -1,3 +1,4 @@
+import type { CSSProperties } from '@mui/material';
 import styled from 'styled-components';
 
 export const HeaderWrapper = styled.header`
@@ -59,3 +60,10 @@ export const ContentWrapper = styled.div`
         height: calc(100vh - 89px);
     }
 `;
+
+export const headerStyles = {
+  logoutButton: {
+    fontFamily: 'var(--standard-font-family)',
+    color: 'var(--action-button-color)',
+  } as CSSProperties,
+};
