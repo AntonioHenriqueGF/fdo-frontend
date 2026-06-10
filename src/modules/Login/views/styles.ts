@@ -32,6 +32,3 @@ export const LoginFormWrapper = styled.div`
         
     }
 `;
-
-export const LoginForm = styled.form`
-`;
