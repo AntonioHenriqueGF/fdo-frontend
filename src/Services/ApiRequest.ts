@@ -1,4 +1,4 @@
-import type { AxiosResponse } from 'axios';
+import type { AxiosError, AxiosResponse } from 'axios';
 import api from './api';
 
 export interface ApiRequestProps<T> {
@@ -7,13 +7,21 @@ export interface ApiRequestProps<T> {
   data?: any;
   options?: RequestInit;
   callback: (response: AxiosResponse<T>) => void;
-  errorCallback?: (error: any) => void;
+  errorCallback?: (error: AxiosError<any>) => void;
+  finallyCallback?: () => void;
 } 
+
+export interface StandardApiResponse<T> {
+  data: T;
+  message: string;
+  status: 'success' | 'error';
+}
 
 export const ApiRequest = <T>({
   url,
   method,
   data,
+  finallyCallback,
   callback,
   errorCallback,
 }: ApiRequestProps<T>): Promise<void> => {
@@ -25,5 +33,7 @@ export const ApiRequest = <T>({
     callback(response);
   }).catch(error => {
     errorCallback?.(error);
+  }).finally(() => {
+    finallyCallback?.();
   });
 };
