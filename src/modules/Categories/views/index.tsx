@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { ContentPad } from '../../../shared/components/ContentPad';
 import { ApiRequest, type StandardApiResponse } from '../../../Services/ApiRequest';
 import { useSnackbar } from 'notistack';
@@ -10,39 +10,17 @@ import { ContentWrapper } from './styles';
 import { Loading } from '../../../shared/components/Loading';
 import type { Category, CategoryList } from '../models/Categories';
 import { CategoriesList } from '../components/CategoriesList';
+import { useLoaderData } from 'react-router';
 
 export const Categories: React.FC = () => {
-  const [categories, setCategories] = useState<CategoryList[]>([]);
-  const [loadingCategories, setLoadingCategories] = useState(true);
+  // Get categories from loader and set them in state
+  const loaderData = useLoaderData() as StandardApiResponse<Category[]>;
+
+  const [categories, setCategories] = useState<CategoryList[]>(loaderData?.data ?? []);
+  const [loadingCategories] = useState(!loaderData?.data);
   const [loadingRules, setLoadingRules] = useState<Record<number, boolean>>({});
 
   const { enqueueSnackbar } = useSnackbar();
-
-  useEffect(() => {
-    const abort = new AbortController();
-    // Fetch categories from the backend when the component mounts
-    setLoadingCategories(true);
-    ApiRequest<StandardApiResponse<Category[]>>({
-      url: '/api/categories',
-      method: 'GET',
-      signal: abort.signal,
-      callback: (response) => {
-        setCategories(response.data.data);
-      },
-      errorCallback: () => {
-        if (abort.signal.aborted) return; // Don't show error if the request was aborted
-        enqueueSnackbar('Error loading categories', { variant: 'error' });
-      },
-      finallyCallback: () => {
-        if (abort.signal.aborted) return;
-        setLoadingCategories(false);
-      },
-    });
-    return () => {
-      abort.abort();
-    };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const handleCreateCategory = useCallback((e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
