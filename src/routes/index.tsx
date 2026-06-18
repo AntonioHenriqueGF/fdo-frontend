@@ -4,6 +4,7 @@ import { DashboardViewComponent } from '../modules/Dashboard/routes';
 import { LoginViewComponent } from '../modules/Login/routes';
 import { GlobalGuard } from '../modules/GlobalGuard';
 import { ApiRequest } from '../Services/ApiRequest';
+import { CategoriesRoute } from '../modules/Categories/routes';
 
 export const router = createBrowserRouter([
   {
@@ -15,6 +16,7 @@ export const router = createBrowserRouter([
         element: <DashboardViewComponent />,
         children: [
           FileImportRoute,
+          CategoriesRoute,
         ],
         loader: async() => {
           return ApiRequest({

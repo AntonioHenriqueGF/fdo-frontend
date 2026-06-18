@@ -33,5 +33,5 @@ export const GridWrapper = styled.table`
 
 export const GridContainer = styled.div`
     overflow-y: auto;
-    max-height: calc(100vh - 220px);
+    max-height: calc(100vh - 275px);
 `;

@@ -16,7 +16,8 @@ export const FileImportView: React.FC = () => {
   }, [deleteFileImport]);
 
   return (
-    <ContentPad style={{ height: 'calc(100% - 40px)' }}>
+    <ContentPad>
+      <h2>File Import</h2>
       <CSVReader />
       <ImportPanelSelectionWrapper>
         <UserCustomInput />

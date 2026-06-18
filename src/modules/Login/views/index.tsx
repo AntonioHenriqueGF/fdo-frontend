@@ -1,10 +1,10 @@
 import { Button, TextField } from '@mui/material';
-import { ContentPad } from '../../../shared/components/ContentPad';
 import { LoginFormWrapper } from './styles';
 import { ApiRequest } from '../../../Services/ApiRequest';
 import { useNavigate } from 'react-router';
 import { useSnackbar } from 'notistack';
 import { useCallback } from 'react';
+import { ContentPadSmall } from '../../../shared/components/ContentPad/ContentPadSmall';
 
 export const LoginView: React.FC = () => {
   const navigate = useNavigate();
@@ -46,7 +46,7 @@ export const LoginView: React.FC = () => {
   };
   return (
     <LoginFormWrapper>
-      <ContentPad>
+      <ContentPadSmall>
         <form action="#" method="post" onSubmit={handleSubmit}>
           <h1 className="text-4xl font-bold">Login</h1>
           <TextField size='small' label="Email" name="email" variant="outlined" fullWidth type="email" autoComplete="email" required />
@@ -55,7 +55,7 @@ export const LoginView: React.FC = () => {
             Enviar
           </Button>
         </form>
-      </ContentPad>
+      </ContentPadSmall>
     </LoginFormWrapper>
   );
 };

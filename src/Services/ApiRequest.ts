@@ -5,7 +5,7 @@ export interface ApiRequestProps<T> {
   url: string;
   method: 'GET' | 'POST' | 'PUT' | 'DELETE';
   data?: any;
-  options?: RequestInit;
+  signal?: AbortSignal;
   callback: (response: AxiosResponse<T>) => void;
   errorCallback?: (error: AxiosError<any>) => void;
   finallyCallback?: () => void;
@@ -21,6 +21,7 @@ export const ApiRequest = <T>({
   url,
   method,
   data,
+  signal,
   finallyCallback,
   callback,
   errorCallback,
@@ -29,6 +30,7 @@ export const ApiRequest = <T>({
     url,
     method,
     data,
+    signal,
   }).then(response => {
     callback(response);
   }).catch(error => {
