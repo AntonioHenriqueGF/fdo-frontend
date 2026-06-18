@@ -5,7 +5,7 @@ const DashboardView = lazy(() => import('../views').then(module => ({ default: m
 
 export const DashboardViewComponent: React.FC = () => {
   return (
-    <Suspense fallback={<Loading />}>
+    <Suspense fallback={<Loading style={{ height: '100vh' }} />}>
       <DashboardView />
     </Suspense>
   );

@@ -5,7 +5,7 @@ const LoginView = lazy(() => import('../views').then(module => ({ default: modul
 
 export const LoginViewComponent: React.FC = () => {
   return (
-    <Suspense fallback={<Loading />}>
+    <Suspense fallback={<Loading style={{ height: '100vh' }} />}>
       <LoginView />
     </Suspense>
   );
