@@ -16,7 +16,7 @@ import type { AxiosError } from 'axios';
 export const UserCustomInput: React.FC = () => {
   const [headerLineSelected, setHeaderLineSelected] = useAtom(headerLineSelectedSpreadAtom);
   const [dataStartLineSelected, setDataStartLineSelected] = useAtom(dataStartLineSelectedSpreadAtom);
-  const [dataTypePicked, setDataTypePicked] = useState<Record<DataType, number>>({} as Record<DataType, number>);
+  const [dataTypePicked, setDataTypePicked] = useState<DataType[]>([]);
   const [fileName] = useAtom(fileImportNameAtom);
   const [fileHash] = useAtom(fileImportHashAtom);
 
@@ -33,31 +33,31 @@ export const UserCustomInput: React.FC = () => {
   }, [csvImport]);
 
   const handleTypeSelected = useCallback((dataType: DataType, index: number) => {
-    setDataTypePicked((prev) => ({ ...prev, [dataType as DataType]: index }));
+    setDataTypePicked((prev) => {
+      const updatedDataTypePicked = [...prev];
+      updatedDataTypePicked[index] = dataType;
+      return updatedDataTypePicked;
+    });
   }, [setDataTypePicked]);
 
   const handleSubmit = useCallback(() => {
     // Here you would typically validate the dataTypePicked to ensure all required types are selected
     // and then proceed to normalize the data using the selected header line, data start line, and column type mappings.
     try {
-      const columnMapping = Object.entries(dataTypePicked).map(([dataType, columnIndex]) => ({
-        dataType: dataType as DataType,
-        columnIndex,
-      }));
       if (!csvImport?.data) {
         throw new Error('No CSV data available for processing.');
       }
 
       if (!validateProfile({
         dataLine: dataStartLineSelected,
-        columnTypeMappings: columnMapping,
+        columnTypeMappings: dataTypePicked,
       })) {
         return;
       }
       console.log({
         normalized: normalizeData(csvImport?.data, {
           dataLine: dataStartLineSelected,
-          columnTypeMappings: columnMapping,
+          columnTypeMappings: dataTypePicked,
         }),
         fileName,
         fileHash,
@@ -70,7 +70,7 @@ export const UserCustomInput: React.FC = () => {
         data: {
           normalized: normalizeData(csvImport?.data, {
             dataLine: dataStartLineSelected,
-            columnTypeMappings: columnMapping,
+            columnTypeMappings: dataTypePicked,
           }),
           fileName,
           fileHash,
@@ -104,6 +104,7 @@ export const UserCustomInput: React.FC = () => {
         {headerRow.map((colName, index) => (
           <DataTypeDecider 
             key={`${index}-${colName}`} 
+            value={dataTypePicked[index] || ''}
             identifier={index} 
             colName={colName} 
             onTypeSelected={handleTypeSelected} 
@@ -111,11 +112,13 @@ export const UserCustomInput: React.FC = () => {
         ))}
       </div>
     );
-  }, [headerRow, handleTypeSelected]);
+  }, [headerRow, dataTypePicked, handleTypeSelected]);
 
   return csvImport ? (<UserCustomInputWrapper>
-    <NumberField min={1} max={30} size="small" label="Header start line" value={headerLineSelected} onValueChange={(value) => setHeaderLineSelected(value ?? 1)} />
-    <NumberField min={1} max={30} size="small" label="Data start line" value={dataStartLineSelected} onValueChange={(value) => setDataStartLineSelected(value ?? 1)} />
+    <div className="double-input">
+      <NumberField min={1} max={30} size="small" label="Header start line" value={headerLineSelected} onValueChange={(value) => setHeaderLineSelected(value ?? 1)} />
+      <NumberField min={1} max={30} size="small" label="Data start line" value={dataStartLineSelected} onValueChange={(value) => setDataStartLineSelected(value ?? 1)} />
+    </div>
     <div className="info-text">* Line numbers are 1-based, meaning the first line is considered line 1.</div>
     {dataDecider}
     <Button variant="contained" endIcon={<SendIcon />} onClick={handleSubmit} disabled={submitting} loading={submitting}>

@@ -46,15 +46,15 @@ export const validateProfile = (parsingProfile: IParsingProfile): boolean => {
     throw new Error('No column type mappings provided in the parsing profile.');
   }
 
-  if (!columnTypeMappings.some(mapping => mapping.dataType === 'description')) {
+  if (!columnTypeMappings.some(dataType => dataType === 'description')) {
     throw new Error('At least one column must be mapped to the "description" data type.');
   }
 
-  if (!columnTypeMappings.some(mapping => mapping.dataType === 'amount' || mapping.dataType === 'credit_only' || mapping.dataType === 'debit_only')) {
+  if (!columnTypeMappings.some(dataType => dataType === 'amount' || dataType === 'credit_only' || dataType === 'debit_only')) {
     throw new Error('At least one column must be mapped to a data type that represents an amount (amount, credit, or debit).');
   }
 
-  if (!columnTypeMappings.some(mapping => mapping.dataType === 'date_ddmmyyyy' || mapping.dataType === 'date_mmddyyyy' || mapping.dataType === 'date_yyyymmdd')) {
+  if (!columnTypeMappings.some(dataType => dataType === 'date_ddmmyyyy' || dataType === 'date_mmddyyyy' || dataType === 'date_yyyymmdd')) {
     throw new Error('At least one column must be mapped to a date data type.');
   }
 
@@ -65,16 +65,14 @@ export const normalizeData = (rawData: string[][], parsingProfile: IParsingProfi
   const { dataLine, columnTypeMappings } = parsingProfile;
 
   const lastRowEmpty = isLastRowEmpty(rawData);
-  console.log('Is last raw row all empty strings?', lastRowEmpty);
 
   const data = rawData.slice(dataLine - 1, lastRowEmpty ? -1 : undefined); // Convert 1-based index to 0-based
-  console.log('Raw Data:', rawData,'Data to be normalized:', data);
 
   const normalizedData: NormalizedRow[] = [];
 
   const indexToDataTypeMap: Record<number, DataType> = {};
-  columnTypeMappings.forEach(mapping => {
-    indexToDataTypeMap[mapping.columnIndex] = mapping.dataType;
+  columnTypeMappings.forEach((dataType, index) => {
+    indexToDataTypeMap[index] = dataType;
   });
 
   data.forEach(row => {
@@ -103,6 +101,10 @@ export const normalizeData = (rawData: string[][], parsingProfile: IParsingProfi
         }
       }
       if (dataType && dataType !== 'ignore') {
+        const closingBalanceIndex = columnTypeMappings.findIndex(type => type === 'closing_balance');
+        if (row[closingBalanceIndex]) {
+          return;
+        }
         normalizedRow[dataType] = cell;
         return;
       }

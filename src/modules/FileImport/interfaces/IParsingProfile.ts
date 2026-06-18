@@ -15,5 +15,5 @@ export interface IColumnTypeMapping {
 
 export interface IParsingProfile {
   dataLine: number;
-  columnTypeMappings: IColumnTypeMapping[];
+  columnTypeMappings: DataType[];
 }

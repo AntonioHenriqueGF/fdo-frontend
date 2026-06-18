@@ -5,6 +5,11 @@ export const UserCustomInputWrapper = styled.div`
     flex-direction: column;
     gap: 10px;
 
+    .double-input {
+        display: flex;
+        gap: 20px;
+    }
+
     .info-text {
         font-size: 12px;
         color: #666;

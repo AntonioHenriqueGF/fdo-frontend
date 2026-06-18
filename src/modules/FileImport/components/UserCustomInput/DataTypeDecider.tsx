@@ -1,15 +1,14 @@
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
-import { useState } from 'react';
 import type { DataType } from '../../interfaces/IParsingProfile';
 
 interface DataTypeDeciderProps {
   colName: string;
+  value: DataType;
   onTypeSelected: (dataType: DataType, index: number) => void;
   identifier: number;
 }
 
-export const DataTypeDecider: React.FC<DataTypeDeciderProps> = ({ colName, onTypeSelected, identifier }) => {
-  const [dataType, setDataType] = useState('');
+export const DataTypeDecider: React.FC<DataTypeDeciderProps> = ({ colName, value, onTypeSelected, identifier }) => {
   const handleChange = (
     event:
       | React.ChangeEvent<
@@ -25,7 +24,6 @@ export const DataTypeDecider: React.FC<DataTypeDeciderProps> = ({ colName, onTyp
         };
       }),
   ) => {
-    setDataType(event.target.value);
     onTypeSelected((event.target.value || 'ignore') as DataType, identifier);
   };
   return (
@@ -35,7 +33,7 @@ export const DataTypeDecider: React.FC<DataTypeDeciderProps> = ({ colName, onTyp
         labelId={`col-selector-data-type-label-${identifier}`}
         id={`col-selector-data-type-${identifier}`}
         key={`select${identifier}`}
-        value={dataType}
+        value={value}
         label={colName}
         onChange={handleChange}
       >
