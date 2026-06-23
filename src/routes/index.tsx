@@ -3,8 +3,9 @@ import { FileImportRoute } from '../modules/FileImport/routes';
 import { DashboardViewComponent } from '../modules/Dashboard/routes';
 import { LoginViewComponent } from '../modules/Login/routes';
 import { GlobalGuard } from '../modules/GlobalGuard';
-import { ApiRequest } from '../Services/ApiRequest';
+import { ApiRequest, type StandardApiResponse } from '../Services/ApiRequest';
 import { CategoriesRoute } from '../modules/Categories/routes';
+import { DashboardPanelRoute } from '../modules/Dashboard/routes/DashboardHomeRoute';
 
 export const router = createBrowserRouter([
   {
@@ -15,15 +16,16 @@ export const router = createBrowserRouter([
         path: '/dashboard',
         element: <DashboardViewComponent />,
         children: [
+          DashboardPanelRoute,
           FileImportRoute,
           CategoriesRoute,
         ],
         loader: async() => {
-          return ApiRequest({
+          return ApiRequest<StandardApiResponse>({
             method: 'GET',
             url: '/api/me',
             callback: (response) => {
-              console.log('User data loaded:', response.data);
+              localStorage.setItem('user', JSON.stringify(response.data.data));
             },
             errorCallback: () => {
               console.log('User not authenticated, redirecting to login');
