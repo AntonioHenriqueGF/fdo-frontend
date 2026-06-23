@@ -11,7 +11,7 @@ export interface ApiRequestProps<T> {
   finallyCallback?: () => void;
 } 
 
-export interface StandardApiResponse<T> {
+export interface StandardApiResponse<T = any> {
   data: T;
   message: string;
   status: 'success' | 'error';
