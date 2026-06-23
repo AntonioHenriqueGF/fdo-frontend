@@ -22,7 +22,6 @@ export const Dashboard: React.FC = () => {
       },
     });
   }, [enqueueSnackbar, navigate]);
-
   return (
     <>
       <HeaderWrapper>
