@@ -28,6 +28,10 @@ export const DailyGraph: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log('Loading: ', loading);
+  }, [loading]);
+
+  useEffect(() => {
     const abortController = new AbortController();
     setLoading(true);
     ApiRequest<StandardApiResponse<ReconciliationDailyData[]>>({
@@ -39,7 +43,6 @@ export const DailyGraph: React.FC = () => {
       },
       signal: abortController.signal,
       callback: (response) => {
-        console.log('Daily data response:', response.data);
         const data = response.data.data;
         const balances: DailyBalance[] = data.map((item) => ({
           dba_date: item.tra_date,
@@ -57,6 +60,7 @@ export const DailyGraph: React.FC = () => {
         enqueueSnackbar('Error requesting daily data', { variant: 'error' });
       },
       finallyCallback: () => {
+        if (abortController.signal.aborted) return;
         setLoading(false);
       },
     });
@@ -158,7 +162,6 @@ export const DailyGraph: React.FC = () => {
             label="Date"
             axisId="date"
             tickInterval={(_value, index) => {
-              console.log({index, value: _value});
               const amountOfDataPoints = dailyBalances.length;
               if (amountOfDataPoints <= 30) {
                 return true; // Show all ticks if there are 30 or fewer data points
