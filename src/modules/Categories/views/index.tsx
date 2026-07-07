@@ -6,6 +6,7 @@ import type { AxiosError } from 'axios';
 import { Button, TextField } from '@mui/material';
 
 import AddIcon from '@mui/icons-material/Add';
+import RepeatIcon from '@mui/icons-material/Repeat';
 import { ContentWrapper } from './styles';
 import { Loading } from '../../../shared/components/Loading';
 import type { Category, CategoryList } from '../models/Categories';
@@ -15,6 +16,7 @@ export const Categories: React.FC = () => {
   const [categories, setCategories] = useState<CategoryList[]>([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
   const [loadingRules, setLoadingRules] = useState<Record<number, boolean>>({});
+  const [loadingReprocess, setLoadingReprocess] = useState(false);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -64,15 +66,48 @@ export const Categories: React.FC = () => {
     });
   }, [enqueueSnackbar, setCategories]);
 
+  const handleReprocessRules = useCallback(() => {
+    setLoadingReprocess(true);
+    // Send request to reprocess rules
+    ApiRequest<StandardApiResponse<string>>({
+      url: '/api/reprocess-rules',
+      method: 'POST',
+      callback: () => {
+        enqueueSnackbar('Rules reprocessed successfully', { variant: 'success' });
+      },
+      errorCallback: (error: AxiosError<StandardApiResponse<string>>) => {
+        const errorMessage = error.response?.data.data ?? 'Error reprocessing rules';
+        enqueueSnackbar(errorMessage, { variant: 'error' });
+      },
+      finallyCallback: () => {
+        setLoadingReprocess(false);
+      },
+    });
+  }, [enqueueSnackbar]);
+
   return (
     <ContentPad>
       <ContentWrapper>
         <h2>Categories</h2>
         {/* Form for creating categories */}
-        <form onSubmit={handleCreateCategory}>
-          <TextField type="text" name="categoryName" placeholder="Category Name" size="small" variant="standard" required />
-          <Button type="submit" variant="contained" color="primary" startIcon={<AddIcon />} size='small'>Add Category</Button>
-        </form>
+        <div className="actionButtons">
+          <form onSubmit={handleCreateCategory} className="createCategoryForm">
+            <TextField type="text" name="categoryName" placeholder="Category Name" size="small" variant="standard" required />
+            <Button type="submit" variant="contained" color="primary" startIcon={<AddIcon />} size='small'>Add Category</Button>
+          </form>
+          <Button 
+            className="reprocessButton" 
+            variant="contained" 
+            color="primary" 
+            startIcon={<RepeatIcon />} 
+            size='small' 
+            onClick={handleReprocessRules} 
+            loading={loadingReprocess}
+            disabled={loadingReprocess}
+          >
+            Reprocess Rules
+          </Button>
+        </div>
         {/* List of categories with options to edit and delete */}
         {loadingCategories ? (
           <Loading style={{ height: '100%' }} />
