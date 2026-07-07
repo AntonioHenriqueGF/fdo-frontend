@@ -1,13 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSnackbar } from 'notistack';
-import { Box } from '@mui/material';
+import { Box, Skeleton } from '@mui/material';
 import type { DailyBalance, DailyTransaction, ReconciliationDailyData } from '../../models/GraphModels';
 
 import { ChartsContainer } from '@mui/x-charts/ChartsContainer';
 import { BarPlot, ChartsAxisHighlight, ChartsTooltip, ChartsXAxis, ChartsYAxis, LineHighlightPlot, LinePlot } from '@mui/x-charts';
 import { ApiRequest, type StandardApiResponse } from '../../../../Services/ApiRequest';
 import type { SeriesType } from '../../views/DashboardPanel/Props';
-import { Loading } from '../../../../shared/components/Loading';
 import { IntervalButton, IntervalSelectorWrapper } from './styles';
 
 interface IntervalObject {
@@ -26,10 +25,6 @@ export const DailyGraph: React.FC = () => {
   });
   const [selectedInterval, setSelectedInterval] = useState<string>('1M');
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    console.log('Loading: ', loading);
-  }, [loading]);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -132,7 +127,7 @@ export const DailyGraph: React.FC = () => {
         <IntervalButton active={selectedInterval === '1M'} onClick={() => handleIntervalChange('1M')}>1M</IntervalButton>
       </IntervalSelectorWrapper>
       {loading ? (
-        <Loading />
+        <Skeleton variant="rectangular" width="100%" height={400} animation="pulse" />
       ) : (
         <ChartsContainer series={seriesWithValues}
           xAxis={[

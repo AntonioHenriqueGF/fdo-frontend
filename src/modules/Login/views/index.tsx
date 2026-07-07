@@ -3,12 +3,13 @@ import { LoginFormWrapper } from './styles';
 import { ApiRequest } from '../../../Services/ApiRequest';
 import { useNavigate } from 'react-router';
 import { useSnackbar } from 'notistack';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { ContentPadSmall } from '../../../shared/components/ContentPad/ContentPadSmall';
 
 export const LoginView: React.FC = () => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
+  const [loading, setLoading] = useState(false);
 
   const handleCsrfSuccess = useCallback((data: {
     email: FormDataEntryValue | null;
@@ -35,11 +36,13 @@ export const LoginView: React.FC = () => {
       email: formData.get('email'),
       password: formData.get('password'),
     };
+    setLoading(true);
     ApiRequest({
       method: 'GET',
       url: '/sanctum/csrf-cookie',
       callback: () => handleCsrfSuccess(data),
       errorCallback: () => {
+        setLoading(false);
         enqueueSnackbar('Auth check failed. Please try again.', { variant: 'error' });
       },
     });
@@ -51,7 +54,7 @@ export const LoginView: React.FC = () => {
           <h1 className="text-4xl font-bold">Login</h1>
           <TextField size='small' label="Email" name="email" variant="outlined" fullWidth type="email" autoComplete="email" required />
           <TextField size='small' label="Password" name="password" variant="outlined" fullWidth type="password" autoComplete="current-password" required />
-          <Button variant="contained" color="primary" type="submit" fullWidth>
+          <Button variant="contained" color="primary" type="submit" fullWidth loading={loading}>
             Enviar
           </Button>
         </form>
