@@ -2,12 +2,25 @@ import styled from 'styled-components';
 
 export const ContentWrapper = styled.div`
     height: calc(100% - 80px);
-    font-family: var(--standard-font-family);
     color: var(--standard-text-color);
-    form {
+
+    * {
+        font-family: var(--standard-font-family) !important;
+    }
+
+    .actionButtons {
         display: flex;
         gap: 20px;
+        flex-direction: row;
+        align-items: center;
+        margin-bottom: 20px;
+        justify-content: space-between;
+        .createCategoryForm {
+            display: flex;
+            gap: 20px;
+        }
     }
+
 `;
 
 export const CategoryListStyles = styled.ul`
@@ -66,6 +79,11 @@ export const CategoryListStyles = styled.ul`
         background-color: #e8e8e8;
         padding: 10px;
         border-radius: 5px;
+    }
+
+    .edit-rule-form, .edit-category-form, .add-rule-form {
+        display: flex;
+        gap: 10px;
     }
 
     .rule-description {
