@@ -54,14 +54,6 @@ export const UserCustomInput: React.FC = () => {
       })) {
         return;
       }
-      console.log({
-        normalized: normalizeData(csvImport?.data, {
-          dataLine: dataStartLineSelected,
-          columnTypeMappings: dataTypePicked,
-        }),
-        fileName,
-        fileHash,
-      });
 
       setSubmitting(true);
       ApiRequest({

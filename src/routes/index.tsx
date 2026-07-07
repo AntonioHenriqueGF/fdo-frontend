@@ -28,7 +28,6 @@ export const router = createBrowserRouter([
               localStorage.setItem('user', JSON.stringify(response.data.data));
             },
             errorCallback: () => {
-              console.log('User not authenticated, redirecting to login');
               throw redirect('/login');
             },
           });
