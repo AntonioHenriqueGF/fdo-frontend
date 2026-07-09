@@ -1,11 +1,11 @@
-import { createBrowserRouter, redirect } from 'react-router';
+import { createBrowserRouter } from 'react-router';
 import { FileImportRoute } from '../modules/FileImport/routes';
 import { DashboardViewComponent } from '../modules/Dashboard/routes';
-import { LoginViewComponent } from '../modules/Login/routes';
+import { LoginViewComponent, RegisterViewComponent } from '../modules/Login/routes';
 import { GlobalGuard } from '../modules/GlobalGuard';
-import { ApiRequest, type StandardApiResponse } from '../Services/ApiRequest';
 import { CategoriesRoute } from '../modules/Categories/routes';
 import { DashboardPanelRoute } from '../modules/Dashboard/routes/DashboardHomeRoute';
+import { AuthGuard } from '../modules/AuthGuard';
 
 export const router = createBrowserRouter([
   {
@@ -14,28 +14,33 @@ export const router = createBrowserRouter([
     children: [
       {
         path: '/dashboard',
-        element: <DashboardViewComponent />,
+        element: (
+          <AuthGuard />
+        ),
         children: [
+          {
+            path: '/dashboard',
+            element: (
+              <DashboardViewComponent />
+            ),
+            children: [
+              DashboardPanelRoute,
+              FileImportRoute,
+              CategoriesRoute,
+            ],
+          },
           DashboardPanelRoute,
           FileImportRoute,
           CategoriesRoute,
         ],
-        loader: async() => {
-          return ApiRequest<StandardApiResponse>({
-            method: 'GET',
-            url: '/api/me',
-            callback: (response) => {
-              localStorage.setItem('user', JSON.stringify(response.data.data));
-            },
-            errorCallback: () => {
-              throw redirect('/login');
-            },
-          });
-        },
       },
       {
         path: '/login',
         element: <LoginViewComponent />,
+      },
+      {
+        path: '/signin',
+        element: <RegisterViewComponent />,
       },
     ],
   },

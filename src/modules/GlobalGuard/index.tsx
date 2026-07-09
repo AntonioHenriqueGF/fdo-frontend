@@ -1,10 +1,22 @@
 import { useEffect } from 'react';
-import { Outlet } from 'react-router';
+import { Outlet, useNavigate } from 'react-router';
+import { ApiRequest, type StandardApiResponse } from '../../Services/ApiRequest';
 
 export const GlobalGuard: React.FC = () => {
+  const navigate = useNavigate();
   useEffect(() => {
-    // Here you can add any global checks, such as authentication or permissions
-    // For example, you could check if the user is authenticated and redirect to login if not
+    ApiRequest<StandardApiResponse>({
+      method: 'GET',
+      url: '/api/me',
+      callback: (response) => {
+        localStorage.setItem('user', JSON.stringify(response.data.data));
+        navigate('/dashboard', { replace: true });
+      },
+      errorCallback: () => {
+        navigate('/login', { replace: true });
+      },
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return <Outlet />;
 };
