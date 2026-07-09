@@ -1,21 +1,28 @@
 import { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router';
-import { ApiRequest, type StandardApiResponse } from '../../Services/ApiRequest';
+
+interface AuthenticatedUser {
+  id?: number;
+  use_id?: number;
+}
 
 export const GlobalGuard: React.FC = () => {
   const navigate = useNavigate();
   useEffect(() => {
-    ApiRequest<StandardApiResponse>({
-      method: 'GET',
-      url: '/api/me',
-      callback: (response) => {
-        localStorage.setItem('user', JSON.stringify(response.data.data));
-        navigate('/dashboard', { replace: true });
-      },
-      errorCallback: () => {
-        navigate('/login', { replace: true });
-      },
-    });
+    const storedUser = localStorage.getItem('user');
+
+    if (!storedUser) {
+      navigate('/login', { replace: true });
+      return;
+    }
+
+    try {
+      JSON.parse(storedUser) as AuthenticatedUser;
+    } catch {
+      localStorage.removeItem('user');
+      navigate('/login', { replace: true });
+      return;
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return <Outlet />;

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router';
 import { JobNotificationProvider } from '../JobNotifications/contexts/JobNotificationContext';
+import { ApiRequest, type StandardApiResponse } from '../../Services/ApiRequest';
 
 interface AuthenticatedUser {
   id?: number;
@@ -8,27 +9,22 @@ interface AuthenticatedUser {
 }
 
 export const AuthGuard: React.FC = () => {
-  const [user] = useState<AuthenticatedUser | null>(() => {
-    const storedUser = localStorage.getItem('user');
-
-    if (!storedUser) {
-      return null;
-    }
-
-    try {
-      return JSON.parse(storedUser) as AuthenticatedUser;
-    } catch {
-      localStorage.removeItem('user');
-      return null;
-    }
-  });
+  const [user, setUser] = useState<AuthenticatedUser | null>();
   const navigate = useNavigate();
-
   useEffect(() => {
-    if (!user) {
-      navigate('/login', { replace: true });
-    }
-  }, [navigate, user]);
+    ApiRequest<StandardApiResponse>({
+      method: 'GET',
+      url: '/api/me',
+      callback: (response) => {
+        const userData = response.data.data;
+        setUser(userData);
+      },
+      errorCallback: () => {
+        navigate('/login', { replace: true });
+      },
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (!user) {
     return null;

@@ -6,6 +6,8 @@ import { GlobalGuard } from '../modules/GlobalGuard';
 import { CategoriesRoute } from '../modules/Categories/routes';
 import { DashboardPanelRoute } from '../modules/Dashboard/routes/DashboardHomeRoute';
 import { AuthGuard } from '../modules/AuthGuard';
+import { TransactionsRoute } from '../modules/Transactions/routes';
+import { UnauthGuard } from '../modules/UnauthGuard';
 
 export const router = createBrowserRouter([
   {
@@ -23,17 +25,24 @@ export const router = createBrowserRouter([
               DashboardPanelRoute,
               FileImportRoute,
               CategoriesRoute,
+              TransactionsRoute,
             ],
           },
         ],
       },
       {
-        path: '/login',
-        element: <LoginViewComponent />,
-      },
-      {
-        path: '/signin',
-        element: <RegisterViewComponent />,
+        path: '/',
+        element: <UnauthGuard />,
+        children: [
+          {
+            path: '/login',
+            element: <LoginViewComponent />,
+          },
+          {
+            path: '/signin',
+            element: <RegisterViewComponent />,
+          },
+        ],
       },
     ],
   },
