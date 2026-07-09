@@ -14,24 +14,17 @@ export const router = createBrowserRouter([
     children: [
       {
         path: '/dashboard',
-        element: (
-          <AuthGuard />
-        ),
+        element: <AuthGuard />,
         children: [
           {
             path: '/dashboard',
-            element: (
-              <DashboardViewComponent />
-            ),
+            element: <DashboardViewComponent />,
             children: [
               DashboardPanelRoute,
               FileImportRoute,
               CategoriesRoute,
             ],
           },
-          DashboardPanelRoute,
-          FileImportRoute,
-          CategoriesRoute,
         ],
       },
       {

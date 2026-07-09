@@ -73,7 +73,7 @@ export const Categories: React.FC = () => {
       url: '/api/reprocess-rules',
       method: 'POST',
       callback: () => {
-        enqueueSnackbar('Rules reprocessed successfully', { variant: 'success' });
+        enqueueSnackbar('Rules reprocess solicitation sent', { variant: 'info' });
       },
       errorCallback: (error: AxiosError<StandardApiResponse<string>>) => {
         const errorMessage = error.response?.data.data ?? 'Error reprocessing rules';

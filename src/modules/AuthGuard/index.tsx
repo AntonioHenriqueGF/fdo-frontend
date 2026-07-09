@@ -1,33 +1,42 @@
 import { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router';
-import { echo } from '../../Services/echo';
+import { JobNotificationProvider } from '../JobNotifications/contexts/JobNotificationContext';
+
+interface AuthenticatedUser {
+  id?: number;
+  use_id?: number;
+}
 
 export const AuthGuard: React.FC = () => {
-  const [user, setUser] = useState<any>(null);
+  const [user] = useState<AuthenticatedUser | null>(() => {
+    const storedUser = localStorage.getItem('user');
+
+    if (!storedUser) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(storedUser) as AuthenticatedUser;
+    } catch {
+      localStorage.removeItem('user');
+      return null;
+    }
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    } else {
+    if (!user) {
       navigate('/login', { replace: true });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  
-  useEffect(() => {
-    if (!user) return;
+  }, [navigate, user]);
 
-    const channel = echo.private(`App.Models.User.${user.use_id}`);
+  if (!user) {
+    return null;
+  }
 
-    channel.listen('.job-request.updated', (event: string) => {
-      console.log(event);
-    });
-
-    return () => {
-      echo.leave(`private-App.Models.User.${user.use_id}`);
-    };
-  }, [user]);
-  return user && <Outlet />;
+  return (
+    <JobNotificationProvider user={user}>
+      <Outlet />
+    </JobNotificationProvider>
+  );
 };
