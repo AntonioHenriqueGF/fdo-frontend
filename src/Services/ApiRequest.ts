@@ -30,6 +30,7 @@ export const ApiRequest = <T>({
     url,
     method,
     data,
+    params: method === 'GET' ? data : undefined,
     signal,
   }).then(response => {
     callback?.(response);

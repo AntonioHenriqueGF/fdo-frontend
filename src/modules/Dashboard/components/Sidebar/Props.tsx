@@ -1,6 +1,7 @@
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import HomeIcon from '@mui/icons-material/Home';
 import LabelIcon from '@mui/icons-material/Label';
+import SyncAltIcon from '@mui/icons-material/SyncAlt';
 
 export const DashboardSidebarLinks = [
   {
@@ -17,5 +18,10 @@ export const DashboardSidebarLinks = [
     path: '/dashboard/categories',
     icon: <LabelIcon />,
     label: 'Categories',
+  },
+  {
+    path: '/dashboard/transactions',
+    icon: <SyncAltIcon />,
+    label: 'Transactions',
   },
 ];
