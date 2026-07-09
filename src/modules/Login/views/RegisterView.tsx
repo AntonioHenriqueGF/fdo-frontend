@@ -6,25 +6,27 @@ import { useSnackbar } from 'notistack';
 import { useCallback, useState } from 'react';
 import { ContentPadSmall } from '../../../shared/components/ContentPad/ContentPadSmall';
 
-export const LoginView: React.FC = () => {
+export const RegisterView: React.FC = () => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
 
   const handleCsrfSuccess = useCallback((data: {
+    name: FormDataEntryValue | null;
     email: FormDataEntryValue | null;
     password: FormDataEntryValue | null;
+    password_confirmation: FormDataEntryValue | null;
   }) => {
     ApiRequest({
       method: 'POST',
-      url: '/api/login',
+      url: '/api/signup',
       data,
       callback: () => {
         navigate('/dashboard');
-        enqueueSnackbar('Login successful', { variant: 'success' });
+        enqueueSnackbar('Account created successfully', { variant: 'success' });
       },
       errorCallback: () => {
-        enqueueSnackbar('Login failed. Please check your credentials and try again.', { variant: 'error' });
+        enqueueSnackbar('Unable to create account. Please review your data and try again.', { variant: 'error' });
       },
       finallyCallback: () => setLoading(false),
     });
@@ -34,9 +36,12 @@ export const LoginView: React.FC = () => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const data = {
+      name: formData.get('name'),
       email: formData.get('email'),
       password: formData.get('password'),
+      password_confirmation: formData.get('password_confirmation'),
     };
+
     setLoading(true);
     ApiRequest({
       method: 'GET',
@@ -53,19 +58,30 @@ export const LoginView: React.FC = () => {
     <LoginFormWrapper>
       <ContentPadSmall>
         <form action="#" method="post" onSubmit={handleSubmit}>
-          <h1 className="text-4xl font-bold">Login</h1>
+          <h1 className="text-4xl font-bold">Create Account</h1>
+          <TextField size='small' label="Name" name="name" variant="outlined" fullWidth required />
           <TextField size='small' label="Email" name="email" variant="outlined" fullWidth type="email" autoComplete="email" required />
-          <TextField size='small' label="Password" name="password" variant="outlined" fullWidth type="password" autoComplete="current-password" required />
+          <TextField size='small' label="Password" name="password" variant="outlined" fullWidth type="password" autoComplete="new-password" required />
+          <TextField
+            size='small'
+            label="Confirm password"
+            name="password_confirmation"
+            variant="outlined"
+            fullWidth
+            type="password"
+            autoComplete="new-password"
+            required
+          />
           <Button variant="contained" color="primary" type="submit" fullWidth loading={loading}>
-            Login
+            Create Account
           </Button>
           <button
             className="mode-switch-link"
             type="button"
-            onClick={() => navigate('/signin')}
+            onClick={() => navigate('/login')}
             disabled={loading}
           >
-            Don't have an account? Create one now
+            Already have an account? Log in
           </button>
         </form>
       </ContentPadSmall>
