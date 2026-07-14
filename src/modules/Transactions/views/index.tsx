@@ -7,6 +7,7 @@ import type { Transaction, TransactionResponse } from '../models/TransactionResp
 import type { Category } from '../../Categories/models/Categories';
 import { TransactionsFiltersForm } from '../components/TransactionsFiltersForm';
 import { TransactionsDataGrid } from '../components/TransactionsDataGrid';
+import { TransactionFormModal } from '../components/TransactionFormModal';
 
 export const TransactionsView: React.FC = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -28,6 +29,11 @@ export const TransactionsView: React.FC = () => {
     page: 0,
     pageSize: 10,
   });
+  const [selectedTransactionId, setSelectedTransactionId] = useState<number | null>(null);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [actionLoading, setActionLoading] = useState(false);
+  const [reloadKey, setReloadKey] = useState(0);
   
   useEffect(() => {
     const abort = new AbortController();
@@ -54,6 +60,10 @@ export const TransactionsView: React.FC = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const refetchTransactions = () => {
+    setReloadKey((current) => current + 1);
+  };
 
   useEffect(() => {
     const abort = new AbortController();
@@ -88,7 +98,7 @@ export const TransactionsView: React.FC = () => {
       abort.abort();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters, paginationModel.page, paginationModel.pageSize]);
+  }, [filters, paginationModel.page, paginationModel.pageSize, reloadKey]);
 
   const handleSearchFilter = ({
     category_id,
@@ -99,8 +109,95 @@ export const TransactionsView: React.FC = () => {
     date_start: string;
     date_end: string;
   }) => {
+    setSelectedTransactionId(null);
     setFilters({ category_id, date_start, date_end });
     setPaginationModel((current) => ({ ...current, page: 0 }));
+  };
+
+  const handlePaginationModelChange = (model: GridPaginationModel) => {
+    setSelectedTransactionId(null);
+    setPaginationModel(model);
+  };
+
+  const selectedTransaction = transactions.find((transaction) => transaction.tra_id === selectedTransactionId) ?? null;
+
+  const handleCreateTransaction = (values: {
+    tra_description: string;
+    tra_amount: string;
+    tra_date: string;
+  }) => {
+    setActionLoading(true);
+    ApiRequest<StandardApiResponse<Transaction>>({
+      url: '/api/transactions/',
+      method: 'POST',
+      data: values,
+      callback: () => {
+        enqueueSnackbar('Transaction created successfully', { variant: 'success' });
+        setIsCreateModalOpen(false);
+        refetchTransactions();
+      },
+      errorCallback: (error) => {
+        enqueueSnackbar(error.response?.data?.message ?? 'Error creating transaction', { variant: 'error' });
+      },
+      finallyCallback: () => {
+        setActionLoading(false);
+      },
+    });
+  };
+
+  const handleEditTransaction = (values: {
+    tra_description: string;
+    tra_amount: string;
+    tra_date: string;
+  }) => {
+    if (!selectedTransactionId) return;
+
+    setActionLoading(true);
+    ApiRequest<StandardApiResponse<Transaction>>({
+      url: '/api/transactions/' + (selectedTransactionId ?? ''),
+      method: 'PUT',
+      data: values,
+      callback: () => {
+        enqueueSnackbar('Transaction updated successfully', { variant: 'success' });
+        setIsEditModalOpen(false);
+        refetchTransactions();
+      },
+      errorCallback: (error) => {
+        enqueueSnackbar(error.response?.data?.message ?? 'Error updating transaction', { variant: 'error' });
+      },
+      finallyCallback: () => {
+        setActionLoading(false);
+      },
+    });
+  };
+
+  const handleDeleteTransaction = () => {
+    if (!selectedTransaction) return;
+
+    const shouldDelete = window.confirm('Do you really want to delete the selected transaction?');
+    if (!shouldDelete) return;
+
+    setActionLoading(true);
+    ApiRequest<StandardApiResponse<null>>({
+      url: '/api/transactions/' + (selectedTransactionId ?? ''),
+      method: 'DELETE',
+      data: {
+        tra_description: selectedTransaction.tra_description,
+        tra_amount: selectedTransaction.tra_amount,
+        tra_date: selectedTransaction.tra_date,
+      },
+      callback: () => {
+        enqueueSnackbar('Transaction deleted successfully', { variant: 'success' });
+        setSelectedTransactionId(null);
+        refetchTransactions();
+      },
+      errorCallback: (error) => {
+        enqueueSnackbar(error.response?.data?.message ?? 'Error deleting transaction', { variant: 'error' });
+      },
+      finallyCallback: () => {
+        setActionLoading(false);
+      },
+    });
   };
 
   return (<ContentPad>
@@ -112,10 +209,34 @@ export const TransactionsView: React.FC = () => {
     />
     <TransactionsDataGrid
       rows={transactions}
-      loading={loading}
+      loading={loading || actionLoading}
       totalRows={totalTransactions}
+      selectedTransactionId={selectedTransactionId}
       paginationModel={paginationModel}
-      onPaginationModelChange={setPaginationModel}
+      onSelectTransaction={setSelectedTransactionId}
+      onPaginationModelChange={handlePaginationModelChange}
+      onCreateClick={() => setIsCreateModalOpen(true)}
+      onEditClick={() => setIsEditModalOpen(true)}
+      onDeleteClick={handleDeleteTransaction}
+    />
+    <TransactionFormModal
+      open={isCreateModalOpen}
+      mode="create"
+      loading={actionLoading}
+      onClose={() => setIsCreateModalOpen(false)}
+      onSubmit={handleCreateTransaction}
+    />
+    <TransactionFormModal
+      open={isEditModalOpen}
+      mode="edit"
+      loading={actionLoading}
+      initialValues={selectedTransaction ? {
+        tra_description: selectedTransaction.tra_description,
+        tra_amount: selectedTransaction.tra_amount,
+        tra_date: selectedTransaction.tra_date,
+      } : undefined}
+      onClose={() => setIsEditModalOpen(false)}
+      onSubmit={handleEditTransaction}
     />
   </ContentPad>);
 };
