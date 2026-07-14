@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { CategoryListStyles } from '../views/styles';
-import { Button, TextField } from '@mui/material';
+import { Button, IconButton, TextField } from '@mui/material';
 
 import LabelIcon from '@mui/icons-material/Label';
 import AddIcon from '@mui/icons-material/Add';
@@ -9,6 +9,7 @@ import RuleIcon from '@mui/icons-material/Rule';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import { ApiRequest, type StandardApiResponse } from '../../../Services/ApiRequest';
 import type { Category, CategoryList } from '../models/Categories';
 import type { AxiosError } from 'axios';
@@ -30,6 +31,7 @@ export const CategoriesList: React.FC<CategoriesListProps> = ({ categories, setC
   const [deletingCategoryId, setDeletingCategoryId] = useState<Record<number, boolean>>({});
   const [savingEditCategoryId, setSavingEditCategoryId] = useState<Record<number, boolean>>({});
   const [savingNewRuleCategoryId, setSavingNewRuleCategoryId] = useState<Record<number, boolean>>({});
+  const [loadingToggleIncome, setLoadingToggleIncome] = useState<Record<number, boolean>>({});
 
   const handleDeleteCategory = useCallback((categoryId: number) => {
     // Send request to delete the category
@@ -125,6 +127,25 @@ export const CategoriesList: React.FC<CategoriesListProps> = ({ categories, setC
       },
     });
   }, [enqueueSnackbar, setCategories]);
+
+  const toggleIncomeStatus = useCallback((categoryId: number, currentStatus: boolean) => {
+    setLoadingToggleIncome((prev) => ({ ...prev, [categoryId]: true }));
+    ApiRequest<StandardApiResponse<Category>>({
+      url: `/api/categories/${categoryId}/income`,
+      method: 'PATCH',
+      data: { cat_is_income: !currentStatus },
+      callback: (response) => {
+        setCategories((prev) => prev.map((cat) => cat.cat_id === categoryId ? response.data.data : cat));
+      },
+      errorCallback: (error: AxiosError<StandardApiResponse<string>>) => {
+        const errorMessage = error.response?.data.data ?? 'Error updating category income status';
+        enqueueSnackbar(errorMessage, { variant: 'error' });
+      },
+      finallyCallback: () => {
+        setLoadingToggleIncome((prev) => ({ ...prev, [categoryId]: false }));
+      },
+    });
+  }, [enqueueSnackbar, setCategories]);
   return (
     <CategoryListStyles>
       {categories.length ? categories.map((category) => {
@@ -145,6 +166,13 @@ export const CategoriesList: React.FC<CategoriesListProps> = ({ categories, setC
                 ) : category.cat_description}
               </div>
               <div className="category-item-buttons item-buttons">
+                <IconButton 
+                  color={category.cat_is_income ? 'warning' : 'inherit'} 
+                  size='small' 
+                  onClick={() => toggleIncomeStatus(category.cat_id, !!category.cat_is_income)}
+                  loading={loadingToggleIncome[category.cat_id] ?? false}>
+                  <MonetizationOnIcon />
+                </IconButton>
                 <Button color='primary' variant='contained' size='small' onClick={() => toggleRulesMode(category)}>{showRules ? <CloseIcon /> : <RuleIcon />}</Button>
                 <Button color='warning' variant='contained' size='small' onClick={() => toggleEditMode(category.cat_id)}>{isEditing ? <CloseIcon /> : <EditIcon />}</Button> 
                 <Button color='error' variant='contained' size='small' onClick={() => handleDeleteCategory(category.cat_id)} loading={deleting}><DeleteIcon /></Button>

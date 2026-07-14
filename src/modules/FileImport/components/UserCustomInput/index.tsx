@@ -68,7 +68,7 @@ export const UserCustomInput: React.FC = () => {
           fileHash,
         },
         callback: () => {          
-          enqueueSnackbar('File imported successfully', { variant: 'success' });
+          enqueueSnackbar('File import job started', { variant: 'info' });
         },
         errorCallback: (error: AxiosError<StandardApiResponse<any>>) => {
           enqueueSnackbar(error.response?.data.message ?? 'File import failed. Please try again.', { variant: 'error' });

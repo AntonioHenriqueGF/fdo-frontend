@@ -3,7 +3,7 @@ import api from './api';
 
 export interface ApiRequestProps<T> {
   url: string;
-  method: 'GET' | 'POST' | 'PUT' | 'DELETE';
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   data?: any;
   signal?: AbortSignal;
   callback?: (response: AxiosResponse<T>) => void;
