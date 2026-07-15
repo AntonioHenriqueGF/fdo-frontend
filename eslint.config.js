@@ -39,6 +39,7 @@ export default defineConfig([
         'warn',
         { allowConstantExport: true },
       ],
+      'react-hooks/set-state-in-effect': 'off',
       "react-hooks/exhaustive-deps": 'warn',
       '@stylistic/indent': ['error', 2],
       '@stylistic/quotes': ['error', 'single'],
