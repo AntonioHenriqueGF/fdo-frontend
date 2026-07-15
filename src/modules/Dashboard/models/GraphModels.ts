@@ -23,3 +23,22 @@ export interface ReconciliationDailyData {
   total_amount: string
   dba_closing_balance: string
 }
+
+export interface DashboardCategoryFilters {
+  category_id: string[]
+  date_start: string
+  date_end: string
+}
+
+export interface CategoryTotalGraphPoint {
+  categoryId: string
+  label: string
+  totalAmount: number
+}
+
+export interface CategoryDailyGraphPoint {
+  date: string
+  categoryId: string
+  label: string
+  totalAmount: number
+}
