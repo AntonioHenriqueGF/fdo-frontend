@@ -8,6 +8,7 @@ import { DashboardPanelRoute } from '../modules/Dashboard/routes/DashboardHomeRo
 import { AuthGuard } from '../modules/AuthGuard';
 import { TransactionsRoute } from '../modules/Transactions/routes';
 import { UnauthGuard } from '../modules/UnauthGuard';
+import { DailyBalancesRoute } from '../modules/DailyBalances/routes';
 
 export const router = createBrowserRouter([
   {
@@ -26,6 +27,7 @@ export const router = createBrowserRouter([
               FileImportRoute,
               CategoriesRoute,
               TransactionsRoute,
+              DailyBalancesRoute,
             ],
           },
         ],

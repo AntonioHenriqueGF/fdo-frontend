@@ -2,6 +2,7 @@ import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import HomeIcon from '@mui/icons-material/Home';
 import LabelIcon from '@mui/icons-material/Label';
 import SyncAltIcon from '@mui/icons-material/SyncAlt';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 
 export const DashboardSidebarLinks = [
   {
@@ -23,5 +24,10 @@ export const DashboardSidebarLinks = [
     path: '/dashboard/transactions',
     icon: <SyncAltIcon />,
     label: 'Transactions',
+  },
+  {
+    path: '/dashboard/daily-balances',
+    icon: <AccountBalanceIcon />,
+    label: 'Daily Balances',
   },
 ];
