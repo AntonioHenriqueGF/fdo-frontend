@@ -19,7 +19,7 @@ server {
     ssl_certificate_key /etc/letsencrypt/live/${NGINX_SERVER_NAME}/privkey.pem;
 
     location / {
-        proxy_pass http://api:8080;
+        proxy_pass http://frontend:8080;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-Proto $scheme;

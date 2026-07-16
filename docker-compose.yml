@@ -9,7 +9,7 @@ volumes:
   certbot-etc:
 
 services:
-  api:
+  frontend:
     build:
       context: .
       dockerfile: Dockerfile
