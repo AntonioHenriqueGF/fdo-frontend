@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router';
 import { JobNotificationProvider } from '../JobNotifications/contexts/JobNotificationContext';
-import { ApiRequest, type StandardApiResponse } from '../../Services/ApiRequest';
+import {
+  ApiRequest,
+  type StandardApiResponse,
+} from '../../Services/ApiRequest';
 
 interface AuthenticatedUser {
   id?: number;
@@ -18,6 +21,7 @@ export const AuthGuard: React.FC = () => {
       callback: (response) => {
         const userData = response.data.data;
         setUser(userData);
+        localStorage.setItem('user', JSON.stringify(userData));
       },
       errorCallback: () => {
         navigate('/login', { replace: true });

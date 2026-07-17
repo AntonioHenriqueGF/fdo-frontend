@@ -1,20 +1,20 @@
 body {
-    background-color: var(--background-color);
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  background-color: var(--background-color);
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 :root {
-    --background-color: #ecf1f7;
-    --standard-font-family: 'Inter', sans-serif;
-    --standard-text-color: #333;
-    --hover-text-color: #3e6087;
-    --hover-background-color: #d7e0ed;
+  --background-color: #ecf1f7;
+  --standard-font-family: 'Inter', sans-serif;
+  --standard-text-color: #333;
+  --hover-text-color: #3e6087;
+  --hover-background-color: #d7e0ed;
 
-    --active-text-color: #d7e0ed;
-    --active-background-color: #3e6087;
+  --active-text-color: #d7e0ed;
+  --active-background-color: #3e6087;
 
-    --standard-transition: 0.3s ease;
-    --action-button-color: #245b8f;
+  --standard-transition: 0.3s ease;
+  --action-button-color: #245b8f;
 }

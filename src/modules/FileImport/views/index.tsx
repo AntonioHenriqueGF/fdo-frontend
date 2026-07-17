@@ -6,6 +6,7 @@ import { ImportPanelSelectionWrapper } from './styles';
 import { deleteFileImportAtom, fileImportHashAtom } from '../atoms/importAtoms';
 import { useAtom } from 'jotai';
 import { ContentPad } from '../../../shared/components/ContentPad';
+import { ImportList } from '../components/ImportList';
 
 export const FileImportView: React.FC = () => {
   const [, deleteFileImport] = useAtom(deleteFileImportAtom);
@@ -20,16 +21,14 @@ export const FileImportView: React.FC = () => {
     <ContentPad>
       <h2>File Import</h2>
       <CSVReader />
-      {
-        fileImportHash ? (
-          <ImportPanelSelectionWrapper>
-            <UserCustomInput />
-            <PreviewGrid />
-          </ImportPanelSelectionWrapper>
-        ) : (
-          <></>
-        )
-      }
+      {fileImportHash ? (
+        <ImportPanelSelectionWrapper>
+          <UserCustomInput />
+          <PreviewGrid />
+        </ImportPanelSelectionWrapper>
+      ) : (
+        <ImportList />
+      )}
     </ContentPad>
   );
 };
