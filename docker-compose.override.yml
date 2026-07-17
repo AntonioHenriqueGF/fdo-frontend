@@ -15,3 +15,5 @@ services:
       dockerfile: Dockerfile.dev
     networks:
       - fdo_network
+    ports:
+      - "81:80"
