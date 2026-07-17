@@ -1,6 +1,6 @@
 networks:
   fdo_network:
-    driver: bridge
+    external: true
 
 volumes:
   # O padrão proficional de persistência é por bind mount, mas para facilitar o uso em ambientes de desenvolvimento
@@ -15,8 +15,6 @@ services:
       dockerfile: Dockerfile
     networks:
       - fdo_network
-    ports:
-      - "80:80"
 
   # nginx:
   #   build:
