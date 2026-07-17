@@ -58,7 +58,6 @@ export default function CSVReader() {
 
     generateHashFromFile(file).then((hash) => {
       set(fileImportHashAtom, hash);
-      enqueueSnackbar('File hash generated successfully', { variant: 'success' });
     }).catch((err) => {
       enqueueSnackbar('Error generating file hash', { variant: 'error' });
       console.error('Error generating file hash:', err);
