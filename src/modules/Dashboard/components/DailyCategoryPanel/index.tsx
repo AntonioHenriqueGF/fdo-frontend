@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
-import { ApiRequest, type StandardApiResponse } from '../../../../Services/ApiRequest';
+import {
+  ApiRequest,
+  type StandardApiResponse,
+} from '../../../../Services/ApiRequest';
 import type { Category } from '../../../Categories/models/Categories';
 import type { DashboardCategoryFilters } from '../../models/GraphModels';
 
@@ -19,7 +22,9 @@ export const DailyCategoryPanel: React.FC = () => {
   const [loadingCategories, setLoadingCategories] = useState<boolean>(true);
   const [filters, setFilters] = useState<DashboardCategoryFilters>({
     category_id: [],
-    date_start: formatDate(new Date(new Date().setDate(new Date().getDate() - 30))),
+    date_start: formatDate(
+      new Date(new Date().setDate(new Date().getDate() - 30)),
+    ),
     date_end: formatDate(new Date()),
   });
 
@@ -47,7 +52,7 @@ export const DailyCategoryPanel: React.FC = () => {
     return () => {
       abort.abort();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleFiltersSubmit = (nextFilters: DashboardCategoryFilters) => {

@@ -1,4 +1,10 @@
-import { createContext, useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useSnackbar } from 'notistack';
 import { EchoProvider } from '../components/EchoProvider';
@@ -31,10 +37,11 @@ interface JobNotificationContextValue {
   syncStatus: 'idle' | 'syncing' | 'ready';
 }
 
-export const JobNotificationContext = createContext<JobNotificationContextValue | null>(null);
+export const JobNotificationContext =
+  createContext<JobNotificationContextValue | null>(null);
 
 const getUserId = (user: AuthenticatedUser): number | null => {
-  const raw = user.use_id ?? user.id as number | string | undefined;
+  const raw = user.use_id ?? (user.id as number | string | undefined);
 
   if (typeof raw === 'number' && Number.isFinite(raw)) {
     return raw;
@@ -59,15 +66,16 @@ const buildJobErrorMessage = (job: JobRequest): string => {
   return `Job #${job.id} (${job.type}) failed: ${reason}`;
 };
 
-export const JobNotificationProvider: React.FC<JobNotificationProviderProps> = ({
-  user,
-  children,
-}) => {
+export const JobNotificationProvider: React.FC<
+  JobNotificationProviderProps
+> = ({ user, children }) => {
   const { enqueueSnackbar } = useSnackbar();
   const jobsMap = useAtomValue(jobRequestsAtom);
   const activeJobs = useAtomValue(activeJobsAtom);
   const upsertJob = useSetAtom(upsertJobRequestAtom);
-  const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'ready'>('idle');
+  const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'ready'>(
+    'idle',
+  );
 
   const userId = getUserId(user);
 
@@ -75,38 +83,51 @@ export const JobNotificationProvider: React.FC<JobNotificationProviderProps> = (
     return Array.from(jobsMap.values());
   }, [jobsMap]);
 
-  const notifyJobStarted = useCallback((job: JobRequest) => {
-    enqueueSnackbar(`Job #${job.id} (${job.type}) started.`, { variant: 'info' });
-  }, [enqueueSnackbar]);
+  const notifyJobStarted = useCallback(
+    (job: JobRequest) => {
+      enqueueSnackbar(`Job #${job.id} (${job.type}) started.`, {
+        variant: 'info',
+      });
+    },
+    [enqueueSnackbar],
+  );
 
-  const notifyJobCompleted = useCallback((job: JobRequest) => {
-    enqueueSnackbar(buildJobSuccessMessage(job), { variant: 'success' });
-  }, [enqueueSnackbar]);
+  const notifyJobCompleted = useCallback(
+    (job: JobRequest) => {
+      enqueueSnackbar(buildJobSuccessMessage(job), { variant: 'success' });
+    },
+    [enqueueSnackbar],
+  );
 
-  const notifyJobFailed = useCallback((job: JobRequest) => {
-    enqueueSnackbar(buildJobErrorMessage(job), { variant: 'error' });
-  }, [enqueueSnackbar]);
+  const notifyJobFailed = useCallback(
+    (job: JobRequest) => {
+      enqueueSnackbar(buildJobErrorMessage(job), { variant: 'error' });
+    },
+    [enqueueSnackbar],
+  );
 
-  const handleJobUpdated = useCallback((payload: unknown) => {
-    handleRealtimeJobUpdate({
-      payload,
-      upsertJob,
-      onJobStarted: notifyJobStarted,
-      onJobCompleted: notifyJobCompleted,
-      onJobFailed: notifyJobFailed,
-    });
-  }, [notifyJobCompleted, notifyJobFailed, notifyJobStarted, upsertJob]);
+  const handleJobUpdated = useCallback(
+    (payload: unknown) => {
+      handleRealtimeJobUpdate({
+        payload,
+        upsertJob,
+        onJobStarted: notifyJobStarted,
+        onJobCompleted: notifyJobCompleted,
+        onJobFailed: notifyJobFailed,
+      });
+    },
+    [notifyJobCompleted, notifyJobFailed, notifyJobStarted, upsertJob],
+  );
 
   useEffect(() => {
     if (!userId) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSyncStatus('ready');
       return;
     }
 
     let isMounted = true;
 
-    const syncInitialJobs = async() => {
+    const syncInitialJobs = async () => {
       setSyncStatus('syncing');
 
       await syncPendingJobRequests({
@@ -142,7 +163,13 @@ export const JobNotificationProvider: React.FC<JobNotificationProviderProps> = (
     return () => {
       isMounted = false;
     };
-  }, [notifyJobCompleted, notifyJobFailed, notifyJobStarted, upsertJob, userId]);
+  }, [
+    notifyJobCompleted,
+    notifyJobFailed,
+    notifyJobStarted,
+    upsertJob,
+    userId,
+  ]);
 
   const contextValue = useMemo<JobNotificationContextValue>(() => {
     return {
@@ -153,13 +180,13 @@ export const JobNotificationProvider: React.FC<JobNotificationProviderProps> = (
     };
   }, [activeJobs, jobs, jobsMap, syncStatus]);
 
-  const content = userId
-    ? (
-      <EchoProvider userId={userId} onJobUpdated={handleJobUpdated}>
-        {children}
-      </EchoProvider>
-    )
-    : children;
+  const content = userId ? (
+    <EchoProvider userId={userId} onJobUpdated={handleJobUpdated}>
+      {children}
+    </EchoProvider>
+  ) : (
+    children
+  );
 
   return (
     <JobNotificationContext.Provider value={contextValue}>

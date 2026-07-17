@@ -5,12 +5,19 @@ import { DailyCategoryPanel } from '../../components/DailyCategoryPanel';
 
 export const DashboardPanel: React.FC = () => {
   const [username] = useMemo(() => {
-    return [JSON.parse(localStorage.getItem('user') ?? '{}').use_name ?? 'User'];
+    return [
+      JSON.parse(localStorage.getItem('user') ?? '{}').use_name ?? 'User',
+    ];
   }, []);
 
   return (
     <ContentPad>
-      <h2>Welcome, <span style={{ fontWeight: 'bold', textTransform: 'capitalize' }}>{username}</span></h2>
+      <h2>
+        Welcome,{' '}
+        <span style={{ fontWeight: 'bold', textTransform: 'capitalize' }}>
+          {username}
+        </span>
+      </h2>
       <div>
         <DailyReconciliation />
         <DailyCategoryPanel />

@@ -1,10 +1,10 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
-import tseslint from 'typescript-eslint'
-import { defineConfig, globalIgnores } from 'eslint/config'
-import stylistic from '@stylistic/eslint-plugin'
+import js from '@eslint/js';
+import globals from 'globals';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import tseslint from 'typescript-eslint';
+import { defineConfig, globalIgnores } from 'eslint/config';
+import stylistic from '@stylistic/eslint-plugin';
 
 export default defineConfig([
   globalIgnores(['dist']),
@@ -35,19 +35,33 @@ export default defineConfig([
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
+      'max-len': [
+        'warn',
+        {
+          code: 80,
+          ignoreUrls: true,
+          ignoreStrings: true,
+          ignoreTemplateLiterals: true,
+          ignoreRegExpLiterals: true,
+          ignoreComments: true,
+        },
+      ],
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },
       ],
       'react-hooks/set-state-in-effect': 'off',
-      "react-hooks/exhaustive-deps": 'warn',
+      'react-hooks/exhaustive-deps': 'warn',
       '@stylistic/indent': ['error', 2],
       '@stylistic/quotes': ['error', 'single'],
       '@stylistic/semi': ['error', 'always'],
       '@stylistic/comma-dangle': ['error', 'always-multiline'],
       '@stylistic/space-before-function-paren': ['error', 'never'],
       '@stylistic/keyword-spacing': ['error', { before: true, after: true }],
-      "react-refresh/only-export-components": "off",
+      'react-refresh/only-export-components': 'off',
+      semi: ['error', 'always'],
+      '@stylistic/space-before-function-paren': ['off'],
+      '@stylistic/indent': ['off'],
     },
   },
-])
+]);

@@ -3,7 +3,11 @@ import { useAtomCallback } from 'jotai/utils';
 import { useCallback, type CSSProperties } from 'react';
 
 import { useCSVReader } from 'react-papaparse';
-import { csvImportAddSpreadAtom, fileImportHashAtom, fileImportNameAtom } from '../../atoms/importAtoms';
+import {
+  csvImportAddSpreadAtom,
+  fileImportHashAtom,
+  fileImportNameAtom,
+} from '../../atoms/importAtoms';
 import type { RawImport } from '../../interfaces/RawImport';
 import { CSVReaderWrapper } from './styles';
 
@@ -49,22 +53,29 @@ export default function CSVReader() {
 
   const [, setCsvImport] = useAtom(csvImportAddSpreadAtom);
 
-  const handleUploadAccepted = useAtomCallback(useCallback((_get, set, results: RawImport, file: File) => {
-    if (file.type !== 'text/csv' && !file.name.endsWith('.csv')) {
-      alert('Please upload a valid CSV file.');
-      return;
-    }
-    set(fileImportNameAtom, file.name);
+  const handleUploadAccepted = useAtomCallback(
+    useCallback(
+      (_get, set, results: RawImport, file: File) => {
+        if (file.type !== 'text/csv' && !file.name.endsWith('.csv')) {
+          alert('Please upload a valid CSV file.');
+          return;
+        }
+        set(fileImportNameAtom, file.name);
 
-    generateHashFromFile(file).then((hash) => {
-      set(fileImportHashAtom, hash);
-    }).catch((err) => {
-      enqueueSnackbar('Error generating file hash', { variant: 'error' });
-      console.error('Error generating file hash:', err);
-    });
+        generateHashFromFile(file)
+          .then((hash) => {
+            set(fileImportHashAtom, hash);
+          })
+          .catch((err) => {
+            enqueueSnackbar('Error generating file hash', { variant: 'error' });
+            console.error('Error generating file hash:', err);
+          });
 
-    setCsvImport(results);
-  }, [setCsvImport, enqueueSnackbar]));
+        setCsvImport(results);
+      },
+      [setCsvImport, enqueueSnackbar],
+    ),
+  );
 
   // Handle the removal here
   const handleRemoveFile = useCallback(() => {
@@ -79,22 +90,35 @@ export default function CSVReader() {
         {(props: any) => (
           <>
             <div style={styles.csvReader}>
-              <Button variant="contained" size="medium" type='button' {...props.getRootProps()} style={styles.browseFile}>
+              <Button
+                variant="contained"
+                size="medium"
+                type="button"
+                {...props.getRootProps()}
+                style={styles.browseFile}
+              >
                 Browse file
               </Button>
-              <div style={styles.acceptedFile}>
-                {props.acceptedFile?.name}
-              </div>
+              <div style={styles.acceptedFile}>{props.acceptedFile?.name}</div>
               {props.acceptedFile?.name && (
-                <Button variant="contained" size="medium" type='button' color='error' {...props.getRemoveFileProps()} style={styles.remove} onClick={(event: Event) => {
-                  handleRemoveFile();
-                  const removeProps = props.getRemoveFileProps();
-                  if (removeProps?.onClick) {
-                    removeProps.onClick(event);
-                  }
-                }}>
+                <Button
+                  variant="contained"
+                  size="medium"
+                  type="button"
+                  color="error"
+                  {...props.getRemoveFileProps()}
+                  style={styles.remove}
+                  onClick={(event: Event) => {
+                    handleRemoveFile();
+                    const removeProps = props.getRemoveFileProps();
+                    if (removeProps?.onClick) {
+                      removeProps.onClick(event);
+                    }
+                  }}
+                >
                   Remove
-                </Button>)}
+                </Button>
+              )}
             </div>
           </>
         )}

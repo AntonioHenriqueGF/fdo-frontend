@@ -1,5 +1,10 @@
 import { Alert, Box, Button } from '@mui/material';
-import { DataGrid, type GridColDef, type GridPaginationModel, type GridRowSelectionModel } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  type GridColDef,
+  type GridPaginationModel,
+  type GridRowSelectionModel,
+} from '@mui/x-data-grid';
 import { useMemo } from 'react';
 import type { Transaction } from '../models/TransactionResponse';
 
@@ -30,7 +35,10 @@ export const TransactionsDataGrid: React.FC<TransactionsDataGridProps> = ({
   onEditClick,
   onDeleteClick,
 }) => {
-  const totalPages = Math.max(1, Math.ceil(totalRows / paginationModel.pageSize));
+  const totalPages = Math.max(
+    1,
+    Math.ceil(totalRows / paginationModel.pageSize),
+  );
   const hasSelectedTransaction = selectedTransactionId !== null;
   const rowSelectionModel: GridRowSelectionModel = {
     type: 'include',
@@ -126,7 +134,9 @@ export const TransactionsDataGrid: React.FC<TransactionsDataGridProps> = ({
           size="small"
           variant="outlined"
           onClick={goToLastPage}
-          disabled={loading || paginationModel.page >= totalPages - 1 || totalRows === 0}
+          disabled={
+            loading || paginationModel.page >= totalPages - 1 || totalRows === 0
+          }
         >
           Last page
         </Button>
@@ -142,7 +152,9 @@ export const TransactionsDataGrid: React.FC<TransactionsDataGridProps> = ({
         rowSelectionModel={rowSelectionModel}
         onRowSelectionModelChange={(selectionModel) => {
           const firstSelection = selectionModel.ids.values().next().value;
-          onSelectTransaction(typeof firstSelection === 'number' ? firstSelection : null);
+          onSelectTransaction(
+            typeof firstSelection === 'number' ? firstSelection : null,
+          );
         }}
         keepNonExistentRowsSelected={false}
         paginationModel={paginationModel}

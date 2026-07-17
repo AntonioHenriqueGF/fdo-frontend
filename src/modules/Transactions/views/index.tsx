@@ -2,8 +2,14 @@ import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import type { GridPaginationModel } from '@mui/x-data-grid';
 import { ContentPad } from '../../../shared/components/ContentPad';
-import { ApiRequest, type StandardApiResponse } from '../../../Services/ApiRequest';
-import type { Transaction, TransactionResponse } from '../models/TransactionResponse';
+import {
+  ApiRequest,
+  type StandardApiResponse,
+} from '../../../Services/ApiRequest';
+import type {
+  Transaction,
+  TransactionResponse,
+} from '../models/TransactionResponse';
 import type { Category } from '../../Categories/models/Categories';
 import { TransactionsFiltersForm } from '../components/TransactionsFiltersForm';
 import { TransactionsDataGrid } from '../components/TransactionsDataGrid';
@@ -29,12 +35,14 @@ export const TransactionsView: React.FC = () => {
     page: 0,
     pageSize: 10,
   });
-  const [selectedTransactionId, setSelectedTransactionId] = useState<number | null>(null);
+  const [selectedTransactionId, setSelectedTransactionId] = useState<
+    number | null
+  >(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
   const [reloadKey, setReloadKey] = useState(0);
-  
+
   useEffect(() => {
     const abort = new AbortController();
     // Fetch categories from the backend when the component mounts
@@ -86,7 +94,10 @@ export const TransactionsView: React.FC = () => {
       },
       errorCallback: (error) => {
         if (abort.signal.aborted) return; // Don't show error if the request was aborted
-        enqueueSnackbar(error.response?.data?.message ?? 'Error loading transactions', { variant: 'error' });
+        enqueueSnackbar(
+          error.response?.data?.message ?? 'Error loading transactions',
+          { variant: 'error' },
+        );
       },
       finallyCallback: () => {
         if (abort.signal.aborted) return;
@@ -97,7 +108,7 @@ export const TransactionsView: React.FC = () => {
     return () => {
       abort.abort();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, paginationModel.page, paginationModel.pageSize, reloadKey]);
 
   const handleSearchFilter = ({
@@ -119,7 +130,10 @@ export const TransactionsView: React.FC = () => {
     setPaginationModel(model);
   };
 
-  const selectedTransaction = transactions.find((transaction) => transaction.tra_id === selectedTransactionId) ?? null;
+  const selectedTransaction =
+    transactions.find(
+      (transaction) => transaction.tra_id === selectedTransactionId,
+    ) ?? null;
 
   const handleCreateTransaction = (values: {
     tra_description: string;
@@ -132,12 +146,17 @@ export const TransactionsView: React.FC = () => {
       method: 'POST',
       data: values,
       callback: () => {
-        enqueueSnackbar('Transaction created successfully', { variant: 'success' });
+        enqueueSnackbar('Transaction created successfully', {
+          variant: 'success',
+        });
         setIsCreateModalOpen(false);
         refetchTransactions();
       },
       errorCallback: (error) => {
-        enqueueSnackbar(error.response?.data?.message ?? 'Error creating transaction', { variant: 'error' });
+        enqueueSnackbar(
+          error.response?.data?.message ?? 'Error creating transaction',
+          { variant: 'error' },
+        );
       },
       finallyCallback: () => {
         setActionLoading(false);
@@ -158,12 +177,17 @@ export const TransactionsView: React.FC = () => {
       method: 'PUT',
       data: values,
       callback: () => {
-        enqueueSnackbar('Transaction updated successfully', { variant: 'success' });
+        enqueueSnackbar('Transaction updated successfully', {
+          variant: 'success',
+        });
         setIsEditModalOpen(false);
         refetchTransactions();
       },
       errorCallback: (error) => {
-        enqueueSnackbar(error.response?.data?.message ?? 'Error updating transaction', { variant: 'error' });
+        enqueueSnackbar(
+          error.response?.data?.message ?? 'Error updating transaction',
+          { variant: 'error' },
+        );
       },
       finallyCallback: () => {
         setActionLoading(false);
@@ -174,7 +198,9 @@ export const TransactionsView: React.FC = () => {
   const handleDeleteTransaction = () => {
     if (!selectedTransaction) return;
 
-    const shouldDelete = window.confirm('Do you really want to delete the selected transaction?');
+    const shouldDelete = window.confirm(
+      'Do you really want to delete the selected transaction?',
+    );
     if (!shouldDelete) return;
 
     setActionLoading(true);
@@ -187,12 +213,17 @@ export const TransactionsView: React.FC = () => {
         tra_date: selectedTransaction.tra_date,
       },
       callback: () => {
-        enqueueSnackbar('Transaction deleted successfully', { variant: 'success' });
+        enqueueSnackbar('Transaction deleted successfully', {
+          variant: 'success',
+        });
         setSelectedTransactionId(null);
         refetchTransactions();
       },
       errorCallback: (error) => {
-        enqueueSnackbar(error.response?.data?.message ?? 'Error deleting transaction', { variant: 'error' });
+        enqueueSnackbar(
+          error.response?.data?.message ?? 'Error deleting transaction',
+          { variant: 'error' },
+        );
       },
       finallyCallback: () => {
         setActionLoading(false);
@@ -200,43 +231,49 @@ export const TransactionsView: React.FC = () => {
     });
   };
 
-  return (<ContentPad>
-    <h2>Transactions</h2>
-    <TransactionsFiltersForm
-      categories={categories}
-      loadingCategories={loadingCategories}
-      onSubmit={handleSearchFilter}
-    />
-    <TransactionsDataGrid
-      rows={transactions}
-      loading={loading || actionLoading}
-      totalRows={totalTransactions}
-      selectedTransactionId={selectedTransactionId}
-      paginationModel={paginationModel}
-      onSelectTransaction={setSelectedTransactionId}
-      onPaginationModelChange={handlePaginationModelChange}
-      onCreateClick={() => setIsCreateModalOpen(true)}
-      onEditClick={() => setIsEditModalOpen(true)}
-      onDeleteClick={handleDeleteTransaction}
-    />
-    <TransactionFormModal
-      open={isCreateModalOpen}
-      mode="create"
-      loading={actionLoading}
-      onClose={() => setIsCreateModalOpen(false)}
-      onSubmit={handleCreateTransaction}
-    />
-    <TransactionFormModal
-      open={isEditModalOpen}
-      mode="edit"
-      loading={actionLoading}
-      initialValues={selectedTransaction ? {
-        tra_description: selectedTransaction.tra_description,
-        tra_amount: selectedTransaction.tra_amount,
-        tra_date: selectedTransaction.tra_date,
-      } : undefined}
-      onClose={() => setIsEditModalOpen(false)}
-      onSubmit={handleEditTransaction}
-    />
-  </ContentPad>);
+  return (
+    <ContentPad>
+      <h2>Transactions</h2>
+      <TransactionsFiltersForm
+        categories={categories}
+        loadingCategories={loadingCategories}
+        onSubmit={handleSearchFilter}
+      />
+      <TransactionsDataGrid
+        rows={transactions}
+        loading={loading || actionLoading}
+        totalRows={totalTransactions}
+        selectedTransactionId={selectedTransactionId}
+        paginationModel={paginationModel}
+        onSelectTransaction={setSelectedTransactionId}
+        onPaginationModelChange={handlePaginationModelChange}
+        onCreateClick={() => setIsCreateModalOpen(true)}
+        onEditClick={() => setIsEditModalOpen(true)}
+        onDeleteClick={handleDeleteTransaction}
+      />
+      <TransactionFormModal
+        open={isCreateModalOpen}
+        mode="create"
+        loading={actionLoading}
+        onClose={() => setIsCreateModalOpen(false)}
+        onSubmit={handleCreateTransaction}
+      />
+      <TransactionFormModal
+        open={isEditModalOpen}
+        mode="edit"
+        loading={actionLoading}
+        initialValues={
+          selectedTransaction
+            ? {
+              tra_description: selectedTransaction.tra_description,
+              tra_amount: selectedTransaction.tra_amount,
+              tra_date: selectedTransaction.tra_date,
+            }
+            : undefined
+        }
+        onClose={() => setIsEditModalOpen(false)}
+        onSubmit={handleEditTransaction}
+      />
+    </ContentPad>
+  );
 };

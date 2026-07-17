@@ -45,7 +45,7 @@ export const TransactionFormModal: React.FC<TransactionFormModalProps> = ({
   useEffect(() => {
     if (!open) return;
 
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+     
     setValues({
       tra_description: initialValues?.tra_description ?? '',
       tra_amount: initialValues?.tra_amount ?? '',

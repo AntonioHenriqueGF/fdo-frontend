@@ -4,9 +4,9 @@ type NormalizedRow = Record<DataType, string | number | undefined>;
 
 /**
  * Converts a string formatted as "3.000,00" or "3,000.00" into a number.
- * 
+ *
  * Heuristic:
- * 1. Identify which character (dot or comma) appears last. 
+ * 1. Identify which character (dot or comma) appears last.
  * 2. Treat that last character as the decimal separator.
  * 3. Treat the other character as the thousands separator (and remove it).
  */
@@ -23,12 +23,11 @@ const parseLocaleFloat = (value: string): number => {
   if (lastComma > lastDot) {
     // Case: 3.000,00 -> Comma is decimal, Dot is thousands
     cleanValue = cleanValue
-      .replace(/\./g, '')    // Remove all dots (thousands)
-      .replace(',', '.');    // Replace comma with dot (decimal)
+      .replace(/\./g, '') // Remove all dots (thousands)
+      .replace(',', '.'); // Replace comma with dot (decimal)
   } else if (lastDot > lastComma) {
     // Case: 3,000.00 -> Dot is decimal, Comma is thousands
-    cleanValue = cleanValue
-      .replace(/,/g, '');    // Remove all commas (thousands)
+    cleanValue = cleanValue.replace(/,/g, ''); // Remove all commas (thousands)
   } else {
     // Case: No separators or only one type that we'll assume is decimal
     // If only a comma exists, we must convert it to a dot for parseFloat
@@ -46,22 +45,43 @@ export const validateProfile = (parsingProfile: IParsingProfile): boolean => {
     throw new Error('No column type mappings provided in the parsing profile.');
   }
 
-  if (!columnTypeMappings.some(dataType => dataType === 'description')) {
-    throw new Error('At least one column must be mapped to the "description" data type.');
+  if (!columnTypeMappings.some((dataType) => dataType === 'description')) {
+    throw new Error(
+      'At least one column must be mapped to the "description" data type.',
+    );
   }
 
-  if (!columnTypeMappings.some(dataType => dataType === 'amount' || dataType === 'credit_only' || dataType === 'debit_only')) {
-    throw new Error('At least one column must be mapped to a data type that represents an amount (amount, credit, or debit).');
+  if (
+    !columnTypeMappings.some(
+      (dataType) =>
+        dataType === 'amount' ||
+        dataType === 'credit_only' ||
+        dataType === 'debit_only',
+    )
+  ) {
+    throw new Error(
+      'At least one column must be mapped to a data type that represents an amount (amount, credit, or debit).',
+    );
   }
 
-  if (!columnTypeMappings.some(dataType => dataType === 'date_ddmmyyyy' || dataType === 'date_mmddyyyy' || dataType === 'date_yyyymmdd')) {
+  if (
+    !columnTypeMappings.some(
+      (dataType) =>
+        dataType === 'date_ddmmyyyy' ||
+        dataType === 'date_mmddyyyy' ||
+        dataType === 'date_yyyymmdd',
+    )
+  ) {
     throw new Error('At least one column must be mapped to a date data type.');
   }
 
   return true;
 };
 
-export const normalizeData = (rawData: string[][], parsingProfile: IParsingProfile): NormalizedRow[] => {
+export const normalizeData = (
+  rawData: string[][],
+  parsingProfile: IParsingProfile,
+): NormalizedRow[] => {
   const { dataLine, columnTypeMappings } = parsingProfile;
 
   const lastRowEmpty = isLastRowEmpty(rawData);
@@ -75,14 +95,24 @@ export const normalizeData = (rawData: string[][], parsingProfile: IParsingProfi
     indexToDataTypeMap[index] = dataType;
   });
 
-  data.forEach(row => {
+  data.forEach((row) => {
     const normalizedRow: NormalizedRow = {} as NormalizedRow;
     row.forEach((cell, index) => {
       const dataType = indexToDataTypeMap[index];
       if (cell?.length === 0) {
         return;
       }
-      if ((['amount', 'credit_only', 'debit_only', 'closing_balance'] as DataType[]).includes(dataType) && cell) {
+      if (
+        (
+          [
+            'amount',
+            'credit_only',
+            'debit_only',
+            'closing_balance',
+          ] as DataType[]
+        ).includes(dataType) &&
+        cell
+      ) {
         normalizedRow[dataType] = parseFloat(parseLocaleFloat(cell).toFixed(2));
         return;
       }
@@ -113,5 +143,5 @@ export const normalizeData = (rawData: string[][], parsingProfile: IParsingProfi
 export const isLastRowEmpty = (rawData: string[][]): boolean => {
   if (!rawData || rawData.length === 0) return false;
   const lastRow = rawData[rawData.length - 1];
-  return lastRow.every(cell => (cell ?? '').trim().length === 0);
+  return lastRow.every((cell) => (cell ?? '').trim().length === 0);
 };

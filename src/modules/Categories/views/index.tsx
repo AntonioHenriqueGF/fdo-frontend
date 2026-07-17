@@ -1,6 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ContentPad } from '../../../shared/components/ContentPad';
-import { ApiRequest, type StandardApiResponse } from '../../../Services/ApiRequest';
+import {
+  ApiRequest,
+  type StandardApiResponse,
+} from '../../../Services/ApiRequest';
 import { useSnackbar } from 'notistack';
 import type { AxiosError } from 'axios';
 import { Button, TextField } from '@mui/material';
@@ -43,28 +46,32 @@ export const Categories: React.FC = () => {
     return () => {
       abort.abort();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleCreateCategory = useCallback((e: React.SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
-    const categoryName = formData.get('categoryName') as string;
-    // Send request to create a new category
-    ApiRequest<StandardApiResponse<Category>>({
-      url: '/api/categories',
-      method: 'POST',
-      data: { description: categoryName },
-      callback: (response) => {
-        setCategories((prev) => [...prev, response.data.data]);
-        (e.target as HTMLFormElement).reset(); // Reset the form after successful submission
-      },
-      errorCallback: (error: AxiosError<StandardApiResponse<string>>) => {
-        const errorMessage = error.response?.data.data ?? 'Error creating category';
-        enqueueSnackbar(errorMessage, { variant: 'error' });
-      },
-    });
-  }, [enqueueSnackbar, setCategories]);
+  const handleCreateCategory = useCallback(
+    (e: React.SubmitEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      const formData = new FormData(e.target as HTMLFormElement);
+      const categoryName = formData.get('categoryName') as string;
+      // Send request to create a new category
+      ApiRequest<StandardApiResponse<Category>>({
+        url: '/api/categories',
+        method: 'POST',
+        data: { description: categoryName },
+        callback: (response) => {
+          setCategories((prev) => [...prev, response.data.data]);
+          (e.target as HTMLFormElement).reset(); // Reset the form after successful submission
+        },
+        errorCallback: (error: AxiosError<StandardApiResponse<string>>) => {
+          const errorMessage =
+            error.response?.data.data ?? 'Error creating category';
+          enqueueSnackbar(errorMessage, { variant: 'error' });
+        },
+      });
+    },
+    [enqueueSnackbar, setCategories],
+  );
 
   const handleReprocessRules = useCallback(() => {
     setLoadingReprocess(true);
@@ -73,10 +80,13 @@ export const Categories: React.FC = () => {
       url: '/api/reprocess-rules',
       method: 'POST',
       callback: () => {
-        enqueueSnackbar('Rules reprocess solicitation sent', { variant: 'info' });
+        enqueueSnackbar('Rules reprocess solicitation sent', {
+          variant: 'info',
+        });
       },
       errorCallback: (error: AxiosError<StandardApiResponse<string>>) => {
-        const errorMessage = error.response?.data.data ?? 'Error reprocessing rules';
+        const errorMessage =
+          error.response?.data.data ?? 'Error reprocessing rules';
         enqueueSnackbar(errorMessage, { variant: 'error' });
       },
       finallyCallback: () => {
@@ -92,16 +102,31 @@ export const Categories: React.FC = () => {
         {/* Form for creating categories */}
         <div className="actionButtons">
           <form onSubmit={handleCreateCategory} className="createCategoryForm">
-            <TextField type="text" name="categoryName" placeholder="Category Name" size="small" variant="standard" required />
-            <Button type="submit" variant="contained" color="primary" startIcon={<AddIcon />} size='small'>Add Category</Button>
+            <TextField
+              type="text"
+              name="categoryName"
+              placeholder="Category Name"
+              size="small"
+              variant="standard"
+              required
+            />
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              startIcon={<AddIcon />}
+              size="small"
+            >
+              Add Category
+            </Button>
           </form>
-          <Button 
-            className="reprocessButton" 
-            variant="contained" 
-            color="primary" 
-            startIcon={<RepeatIcon />} 
-            size='small' 
-            onClick={handleReprocessRules} 
+          <Button
+            className="reprocessButton"
+            variant="contained"
+            color="primary"
+            startIcon={<RepeatIcon />}
+            size="small"
+            onClick={handleReprocessRules}
             loading={loadingReprocess}
             disabled={loadingReprocess}
           >

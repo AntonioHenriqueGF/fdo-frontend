@@ -2,11 +2,17 @@ import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import type { GridPaginationModel } from '@mui/x-data-grid';
 import { ContentPad } from '../../../shared/components/ContentPad';
-import { ApiRequest, type StandardApiResponse } from '../../../Services/ApiRequest';
+import {
+  ApiRequest,
+  type StandardApiResponse,
+} from '../../../Services/ApiRequest';
 import { DailyBalancesFiltersForm } from '../components/DailyBalancesFiltersForm';
 import { DailyBalanceFormModal } from '../components/DailyBalanceFormModal';
 import { DailyBalancesDataGrid } from '../components/DailyBalancesDataGrid';
-import type { DailyBalance, DailyBalanceResponse } from '../models/DailyBalance';
+import type {
+  DailyBalance,
+  DailyBalanceResponse,
+} from '../models/DailyBalance';
 
 export const DailyBalancesView: React.FC = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -24,7 +30,9 @@ export const DailyBalancesView: React.FC = () => {
     page: 0,
     pageSize: 10,
   });
-  const [selectedDailyBalanceId, setSelectedDailyBalanceId] = useState<number | null>(null);
+  const [selectedDailyBalanceId, setSelectedDailyBalanceId] = useState<
+    number | null
+  >(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
@@ -55,7 +63,10 @@ export const DailyBalancesView: React.FC = () => {
       },
       errorCallback: (error) => {
         if (abort.signal.aborted) return; // Don't show error if the request was aborted
-        enqueueSnackbar(error.response?.data?.message ?? 'Error loading daily balances', { variant: 'error' });
+        enqueueSnackbar(
+          error.response?.data?.message ?? 'Error loading daily balances',
+          { variant: 'error' },
+        );
       },
       finallyCallback: () => {
         if (abort.signal.aborted) return;
@@ -66,7 +77,7 @@ export const DailyBalancesView: React.FC = () => {
     return () => {
       abort.abort();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, paginationModel.page, paginationModel.pageSize, reloadKey]);
 
   const handleSearchFilter = ({
@@ -86,7 +97,10 @@ export const DailyBalancesView: React.FC = () => {
     setPaginationModel(model);
   };
 
-  const selectedDailyBalance = dailyBalances?.find((dailyBalance) => dailyBalance.dba_id === selectedDailyBalanceId) ?? null;
+  const selectedDailyBalance =
+    dailyBalances?.find(
+      (dailyBalance) => dailyBalance.dba_id === selectedDailyBalanceId,
+    ) ?? null;
 
   const handleCreateDailyBalance = (values: {
     dba_closing_balance: string;
@@ -98,12 +112,17 @@ export const DailyBalancesView: React.FC = () => {
       method: 'POST',
       data: values,
       callback: () => {
-        enqueueSnackbar('Daily balance created successfully', { variant: 'success' });
+        enqueueSnackbar('Daily balance created successfully', {
+          variant: 'success',
+        });
         setIsCreateModalOpen(false);
         refetchDailyBalances();
       },
       errorCallback: (error) => {
-        enqueueSnackbar(error.response?.data?.message ?? 'Error creating daily balance', { variant: 'error' });
+        enqueueSnackbar(
+          error.response?.data?.message ?? 'Error creating daily balance',
+          { variant: 'error' },
+        );
       },
       finallyCallback: () => {
         setActionLoading(false);
@@ -123,12 +142,17 @@ export const DailyBalancesView: React.FC = () => {
       method: 'PUT',
       data: values,
       callback: () => {
-        enqueueSnackbar('Daily balance updated successfully', { variant: 'success' });
+        enqueueSnackbar('Daily balance updated successfully', {
+          variant: 'success',
+        });
         setIsEditModalOpen(false);
         refetchDailyBalances();
       },
       errorCallback: (error) => {
-        enqueueSnackbar(error.response?.data?.message ?? 'Error updating daily balance', { variant: 'error' });
+        enqueueSnackbar(
+          error.response?.data?.message ?? 'Error updating daily balance',
+          { variant: 'error' },
+        );
       },
       finallyCallback: () => {
         setActionLoading(false);
@@ -139,7 +163,9 @@ export const DailyBalancesView: React.FC = () => {
   const handleDeleteDailyBalance = () => {
     if (!selectedDailyBalance) return;
 
-    const shouldDelete = window.confirm('Do you really want to delete the selected daily balance?');
+    const shouldDelete = window.confirm(
+      'Do you really want to delete the selected daily balance?',
+    );
     if (!shouldDelete) return;
 
     setActionLoading(true);
@@ -151,12 +177,17 @@ export const DailyBalancesView: React.FC = () => {
         dba_date: selectedDailyBalance.dba_date,
       },
       callback: () => {
-        enqueueSnackbar('Daily balance deleted successfully', { variant: 'success' });
+        enqueueSnackbar('Daily balance deleted successfully', {
+          variant: 'success',
+        });
         setSelectedDailyBalanceId(null);
         refetchDailyBalances();
       },
       errorCallback: (error) => {
-        enqueueSnackbar(error.response?.data?.message ?? 'Error deleting daily balance', { variant: 'error' });
+        enqueueSnackbar(
+          error.response?.data?.message ?? 'Error deleting daily balance',
+          { variant: 'error' },
+        );
       },
       finallyCallback: () => {
         setActionLoading(false);
@@ -164,40 +195,44 @@ export const DailyBalancesView: React.FC = () => {
     });
   };
 
-  return (<ContentPad>
-    <h2>Daily Balances</h2>
-    <DailyBalancesFiltersForm
-      onSubmit={handleSearchFilter}
-    />
-    <DailyBalancesDataGrid
-      rows={dailyBalances}
-      loading={loading || actionLoading}
-      totalRows={totalDailyBalances}
-      selectedDailyBalanceId={selectedDailyBalanceId}
-      paginationModel={paginationModel}
-      onSelectDailyBalance={setSelectedDailyBalanceId}
-      onPaginationModelChange={handlePaginationModelChange}
-      onCreateClick={() => setIsCreateModalOpen(true)}
-      onEditClick={() => setIsEditModalOpen(true)}
-      onDeleteClick={handleDeleteDailyBalance}
-    />
-    <DailyBalanceFormModal
-      open={isCreateModalOpen}
-      mode="create"
-      loading={actionLoading}
-      onClose={() => setIsCreateModalOpen(false)}
-      onSubmit={handleCreateDailyBalance}
-    />
-    <DailyBalanceFormModal
-      open={isEditModalOpen}
-      mode="edit"
-      loading={actionLoading}
-      initialValues={selectedDailyBalance ? {
-        dba_closing_balance: selectedDailyBalance.dba_closing_balance,
-        dba_date: selectedDailyBalance.dba_date,
-      } : undefined}
-      onClose={() => setIsEditModalOpen(false)}
-      onSubmit={handleEditDailyBalance}
-    />
-  </ContentPad>);
+  return (
+    <ContentPad>
+      <h2>Daily Balances</h2>
+      <DailyBalancesFiltersForm onSubmit={handleSearchFilter} />
+      <DailyBalancesDataGrid
+        rows={dailyBalances}
+        loading={loading || actionLoading}
+        totalRows={totalDailyBalances}
+        selectedDailyBalanceId={selectedDailyBalanceId}
+        paginationModel={paginationModel}
+        onSelectDailyBalance={setSelectedDailyBalanceId}
+        onPaginationModelChange={handlePaginationModelChange}
+        onCreateClick={() => setIsCreateModalOpen(true)}
+        onEditClick={() => setIsEditModalOpen(true)}
+        onDeleteClick={handleDeleteDailyBalance}
+      />
+      <DailyBalanceFormModal
+        open={isCreateModalOpen}
+        mode="create"
+        loading={actionLoading}
+        onClose={() => setIsCreateModalOpen(false)}
+        onSubmit={handleCreateDailyBalance}
+      />
+      <DailyBalanceFormModal
+        open={isEditModalOpen}
+        mode="edit"
+        loading={actionLoading}
+        initialValues={
+          selectedDailyBalance
+            ? {
+                dba_closing_balance: selectedDailyBalance.dba_closing_balance,
+                dba_date: selectedDailyBalance.dba_date,
+              }
+            : undefined
+        }
+        onClose={() => setIsEditModalOpen(false)}
+        onSubmit={handleEditDailyBalance}
+      />
+    </ContentPad>
+  );
 };
