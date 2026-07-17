@@ -101,12 +101,7 @@ export const normalizeData = (rawData: string[][], parsingProfile: IParsingProfi
         }
       }
       if (dataType && dataType !== 'ignore') {
-        const closingBalanceIndex = columnTypeMappings.findIndex(type => type === 'closing_balance');
-        if (row[closingBalanceIndex]) {
-          return;
-        }
         normalizedRow[dataType] = cell;
-        return;
       }
     });
     normalizedData.push(normalizedRow);

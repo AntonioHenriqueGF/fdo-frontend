@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "vite --host --port 8080",
+    "start": "vite --host --port 80",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
