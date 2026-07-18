@@ -2,6 +2,13 @@ import type { DataType, IParsingProfile } from '../interfaces/IParsingProfile';
 
 type NormalizedRow = Record<DataType, string | number | undefined>;
 
+function enforceMaxLength(valor: string): string {
+  if (valor.length >= 255) {
+    return valor.substring(0, 255);
+  }
+  return valor;
+}
+
 /**
  * Converts a string formatted as "3.000,00" or "3,000.00" into a number.
  *
@@ -102,6 +109,7 @@ export const normalizeData = (
       if (cell?.length === 0) {
         return;
       }
+      cell = enforceMaxLength(cell);
       if (
         (
           [
