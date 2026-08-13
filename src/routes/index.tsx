@@ -13,15 +13,22 @@ import { TransactionsRoute } from '../modules/Transactions/routes';
 import { UnauthGuard } from '../modules/UnauthGuard';
 import { DailyBalancesRoute } from '../modules/DailyBalances/routes';
 import { GlobalErrorBoundary } from '../modules/ErrorBoundaries/GlobalErrorBoudary';
+import {
+  requireAuthLoader,
+  requireGuestLoader,
+  rootRedirectLoader,
+} from './loaders/authLoaders';
 
 export const router = createBrowserRouter([
   {
     path: '/',
+    loader: rootRedirectLoader,
     element: <GlobalGuard />,
     errorElement: <GlobalErrorBoundary />,
     children: [
       {
         path: '/dashboard',
+        loader: requireAuthLoader,
         element: <AuthGuard />,
         children: [
           {
@@ -39,6 +46,7 @@ export const router = createBrowserRouter([
       },
       {
         path: '/',
+        loader: requireGuestLoader,
         element: <UnauthGuard />,
         children: [
           {

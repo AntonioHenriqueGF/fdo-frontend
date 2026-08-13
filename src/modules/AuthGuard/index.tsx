@@ -1,38 +1,14 @@
-import { useEffect, useState } from 'react';
-import { Outlet, useNavigate } from 'react-router';
+import { useEffect } from 'react';
+import { Outlet, useLoaderData } from 'react-router';
 import { JobNotificationProvider } from '../JobNotifications/contexts/JobNotificationContext';
-import {
-  ApiRequest,
-  type StandardApiResponse,
-} from '../../Services/ApiRequest';
-
-interface AuthenticatedUser {
-  id?: number;
-  use_id?: number;
-}
+import type { AuthenticatedUser } from '../../routes/loaders/authLoaders';
 
 export const AuthGuard: React.FC = () => {
-  const [user, setUser] = useState<AuthenticatedUser | null>();
-  const navigate = useNavigate();
-  useEffect(() => {
-    ApiRequest<StandardApiResponse>({
-      method: 'GET',
-      url: '/api/me',
-      callback: (response) => {
-        const userData = response.data.data;
-        setUser(userData);
-        localStorage.setItem('user', JSON.stringify(userData));
-      },
-      errorCallback: () => {
-        navigate('/login', { replace: true });
-      },
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const user = useLoaderData<AuthenticatedUser>();
 
-  if (!user) {
-    return null;
-  }
+  useEffect(() => {
+    localStorage.setItem('user', JSON.stringify(user));
+  }, [user]);
 
   return (
     <JobNotificationProvider user={user}>
