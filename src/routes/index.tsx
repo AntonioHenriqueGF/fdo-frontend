@@ -21,7 +21,7 @@ export const router = createBrowserRouter([
     errorElement: <GlobalErrorBoundary />,
     children: [
       {
-        path: '/',
+        path: '/dashboard',
         element: <AuthGuard />,
         children: [
           {
