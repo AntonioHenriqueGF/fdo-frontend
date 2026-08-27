@@ -12,24 +12,30 @@ export const csvImportAddSpreadAtom = atom(
   (get) => get(csvImportRawAtom),
   (_get, set, newData: SetStateAction<RawImport | null>) => {
     set(csvImportRawAtom, newData);
-  });
+  },
+);
 
 export const headerLineSelectedSpreadAtom = atom(
   (get) => get(headerLineSelectedAtom),
   (_get, set, newData: SetStateAction<number>) => {
     set(headerLineSelectedAtom, newData);
-  });
+  },
+);
 
 export const dataStartLineSelectedSpreadAtom = atom(
   (get) => get(dataStartLineSelectedAtom),
   (_get, set, newData: SetStateAction<number>) => {
     set(dataStartLineSelectedAtom, newData);
-  });
+  },
+);
 
 export const deleteFileImportAtom = atom(
   (get) => get(csvImportRawAtom),
   (_get, set) => {
     set(csvImportRawAtom, null);
+    set(fileImportNameAtom, '');
+    set(fileImportHashAtom, '');
     set(headerLineSelectedAtom, 1);
     set(dataStartLineSelectedAtom, 2);
-  });
+  },
+);
