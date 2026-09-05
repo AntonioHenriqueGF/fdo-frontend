@@ -1,23 +1,24 @@
 import styled from 'styled-components';
 
 export const UserCustomInputWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .double-input {
+    display: flex;
+    gap: 20px;
+  }
+
+  .info-text {
+    font-size: 12px;
+    color: #666;
+  }
+
+  .data-type-decider {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-
-    .double-input {
-        display: flex;
-        gap: 20px;
-    }
-
-    .info-text {
-        font-size: 12px;
-        color: #666;
-    }
-
-    .data-type-decider {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-    }
+    gap: 15px;
+    margin-top: 10px;
+  }
 `;

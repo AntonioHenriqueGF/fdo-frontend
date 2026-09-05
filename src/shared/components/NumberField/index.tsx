@@ -43,6 +43,7 @@ export function NumberField({
           required={state.required}
           error={error}
           variant="outlined"
+          style={{ width: '100%' }}
         >
           {props.children}
         </FormControl>

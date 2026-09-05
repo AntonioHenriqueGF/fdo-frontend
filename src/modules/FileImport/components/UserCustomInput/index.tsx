@@ -163,6 +163,7 @@ export const UserCustomInput: React.FC = () => {
           label="Header line"
           value={headerLineSelected}
           onValueChange={(value) => setHeaderLineSelected(value ?? 1)}
+          style={{ width: '100%' }}
         />
       </div>
       <div className="info-text">
