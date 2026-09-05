@@ -5,9 +5,21 @@
 
 @font-face {
   font-family: 'Inter-Italic';
-  src: url('Inter-Italic-VariableFont_opsz\,wght.ttf') format('truetype-variations');
+  src: url('Inter-Italic-VariableFont_opsz\,wght.ttf')
+    format('truetype-variations');
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('Montserrat-VariableFont_wght.ttf') format('truetype-variations');
+}
+
+@font-face {
+  font-family: 'Montserrat-Italic';
+  src: url('Montserrat-Italic-VariableFont_wght.ttf')
+    format('truetype-variations');
 }
 
 * {
-    font-family: 'Inter', sans-serif;
+  font-family: 'Inter', sans-serif;
 }

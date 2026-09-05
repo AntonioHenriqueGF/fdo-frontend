@@ -14,6 +14,9 @@ export const FdoCustomPallete = {
 } satisfies PaletteOptions;
 
 const theme = createTheme({
+  typography: {
+    fontFamily: '"Inter", sans-serif',
+  },
   components: {
     MuiInputBase: {
       styleOverrides: {
