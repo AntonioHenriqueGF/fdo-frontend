@@ -113,7 +113,9 @@ export default function CSVReader() {
                   Browse file
                 </Button>
               )}
-              <div style={styles.acceptedFile}>{props.acceptedFile?.name}</div>
+              <div style={styles.acceptedFile} className="accepted-file-name">
+                {props.acceptedFile?.name}
+              </div>
               {props.acceptedFile?.name && (
                 <IconButton
                   variant="contained"
