@@ -1,4 +1,12 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+} from '@mui/material';
 import { useEffect, useState } from 'react';
 
 interface DailyBalanceFormValues {
@@ -43,7 +51,6 @@ export const DailyBalanceFormModal: React.FC<DailyBalanceFormModalProps> = ({
   useEffect(() => {
     if (!open) return;
 
-     
     setValues({
       dba_date: toDateInputValue(initialValues?.dba_date),
       dba_closing_balance: initialValues?.dba_closing_balance ?? '',
@@ -63,9 +70,16 @@ export const DailyBalanceFormModal: React.FC<DailyBalanceFormModalProps> = ({
   };
 
   return (
-    <Dialog open={open} onClose={loading ? undefined : onClose} fullWidth maxWidth="sm">
+    <Dialog
+      open={open}
+      onClose={loading ? undefined : onClose}
+      fullWidth
+      maxWidth="sm"
+    >
       <Box component="form" onSubmit={handleSubmit}>
-        <DialogTitle>{mode === 'create' ? 'Create Daily Balance' : 'Edit Daily Balance'}</DialogTitle>
+        <DialogTitle>
+          {mode === 'create' ? 'Create Daily Balance' : 'Edit Daily Balance'}
+        </DialogTitle>
         <DialogContent sx={{ display: 'grid', gap: 2, pt: '8px !important' }}>
           <TextField
             label="Date"
@@ -74,20 +88,26 @@ export const DailyBalanceFormModal: React.FC<DailyBalanceFormModalProps> = ({
             onChange={(event) => handleChange('dba_date', event.target.value)}
             required
             slotProps={{ inputLabel: { shrink: true } }}
+            size="small"
             fullWidth
           />
           <TextField
             label="Closing Balance"
             type="number"
             value={values.dba_closing_balance}
-            onChange={(event) => handleChange('dba_closing_balance', event.target.value)}
+            onChange={(event) =>
+              handleChange('dba_closing_balance', event.target.value)
+            }
             required
             slotProps={{ htmlInput: { step: '0.01' } }}
+            size="small"
             fullWidth
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose} disabled={loading}>Cancel</Button>
+          <Button onClick={onClose} disabled={loading}>
+            Cancel
+          </Button>
           <Button type="submit" variant="contained" disabled={loading}>
             {mode === 'create' ? 'Create' : 'Save'}
           </Button>

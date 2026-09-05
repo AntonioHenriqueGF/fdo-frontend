@@ -23,7 +23,7 @@ export const DailyBalancesFiltersForm: React.FC<
     <Box
       component="form"
       onSubmit={handleSubmit}
-      sx={{ display: 'grid', gap: 2, mb: 3 }}
+      sx={{ display: 'grid', gap: 2, mb: 2, mt: 2 }}
     >
       <Box
         sx={{

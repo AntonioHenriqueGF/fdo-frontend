@@ -159,6 +159,8 @@ export const DailyBalancesDataGrid: React.FC<DailyBalancesDataGridProps> = ({
         paginationModel={paginationModel}
         onPaginationModelChange={onPaginationModelChange}
         pageSizeOptions={PAGE_SIZE_OPTIONS}
+        rowHeight={30}
+        columnHeaderHeight={40}
         sx={{
           '--DataGrid-rowWidth': '100% !important',
         }}

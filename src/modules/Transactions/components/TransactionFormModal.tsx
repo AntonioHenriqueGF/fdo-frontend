@@ -1,4 +1,12 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+} from '@mui/material';
 import { useEffect, useState } from 'react';
 
 interface TransactionFormValues {
@@ -45,7 +53,6 @@ export const TransactionFormModal: React.FC<TransactionFormModalProps> = ({
   useEffect(() => {
     if (!open) return;
 
-     
     setValues({
       tra_description: initialValues?.tra_description ?? '',
       tra_amount: initialValues?.tra_amount ?? '',
@@ -66,14 +73,24 @@ export const TransactionFormModal: React.FC<TransactionFormModalProps> = ({
   };
 
   return (
-    <Dialog open={open} onClose={loading ? undefined : onClose} fullWidth maxWidth="sm">
+    <Dialog
+      open={open}
+      onClose={loading ? undefined : onClose}
+      fullWidth
+      maxWidth="sm"
+    >
       <Box component="form" onSubmit={handleSubmit}>
-        <DialogTitle>{mode === 'create' ? 'Create Transaction' : 'Edit Transaction'}</DialogTitle>
+        <DialogTitle>
+          {mode === 'create' ? 'Create Transaction' : 'Edit Transaction'}
+        </DialogTitle>
         <DialogContent sx={{ display: 'grid', gap: 2, pt: '8px !important' }}>
           <TextField
             label="Description"
             value={values.tra_description}
-            onChange={(event) => handleChange('tra_description', event.target.value)}
+            onChange={(event) =>
+              handleChange('tra_description', event.target.value)
+            }
+            size="small"
             required
             fullWidth
           />
@@ -84,6 +101,7 @@ export const TransactionFormModal: React.FC<TransactionFormModalProps> = ({
             onChange={(event) => handleChange('tra_amount', event.target.value)}
             required
             slotProps={{ htmlInput: { step: '0.01' } }}
+            size="small"
             fullWidth
           />
           <TextField
@@ -93,11 +111,14 @@ export const TransactionFormModal: React.FC<TransactionFormModalProps> = ({
             onChange={(event) => handleChange('tra_date', event.target.value)}
             required
             slotProps={{ inputLabel: { shrink: true } }}
+            size="small"
             fullWidth
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose} disabled={loading}>Cancel</Button>
+          <Button onClick={onClose} disabled={loading}>
+            Cancel
+          </Button>
           <Button type="submit" variant="contained" disabled={loading}>
             {mode === 'create' ? 'Create' : 'Save'}
           </Button>
