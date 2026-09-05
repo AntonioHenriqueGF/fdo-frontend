@@ -14,6 +14,7 @@ export const HeaderWrapper = styled.header`
   .drawer-button {
     padding: 10px;
     color: var(--standard-text-color);
+    height: 44px;
     &:hover {
       background-color: var(--hover-background-color);
       color: var(--hover-text-color);
@@ -55,14 +56,26 @@ export const ContentWrapper = styled.div`
   display: flex;
 
   .page-content {
+    transition: width var(--standard-transition);
+  }
+
+  .page-content.closed {
     margin: 10px;
     width: 100%;
     height: calc(100vh - 89px);
   }
 
+  .page-content.open {
+    margin: 10px;
+    width: 100%;
+    height: calc(100vh - 89px);
+    width: calc(100vw - 124px);
+  }
+
   @media (max-width: 600px) {
     .page-content {
-      height: calc(100vh - 158px);
+      height: calc(100vh - 159px) !important;
+      width: calc(100vw - 20px) !important;
     }
   }
 `;

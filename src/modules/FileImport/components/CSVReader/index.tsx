@@ -14,6 +14,8 @@ import { CSVReaderWrapper } from './styles';
 import { useSnackbar } from 'notistack';
 import { generateHashFromFile } from './Props';
 import { Button } from '@mui/material';
+import { IconButton } from '../../../../shared/components/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 const styles = {
   csvReader: {
@@ -29,15 +31,16 @@ const styles = {
     backgroundColor: 'var(--action-button-color)',
   } as CSSProperties,
   acceptedFile: {
-    lineHeight: 2.5,
-    paddingLeft: 10,
+    paddingRight: '10px',
     marginRight: 'auto',
     display: 'flex',
     alignItems: 'center',
     fontFamily: 'var(--standard-font-family)',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
   } as CSSProperties,
   remove: {
-    padding: '0 20px',
     fontFamily: 'var(--standard-font-family)',
   } as CSSProperties,
   progressBar: {
@@ -90,18 +93,20 @@ export default function CSVReader() {
         {(props: any) => (
           <>
             <div style={styles.csvReader}>
-              <Button
-                variant="contained"
-                size="medium"
-                type="button"
-                {...props.getRootProps()}
-                style={styles.browseFile}
-              >
-                Browse file
-              </Button>
+              {!props.acceptedFile && (
+                <Button
+                  variant="contained"
+                  size="medium"
+                  type="button"
+                  {...props.getRootProps()}
+                  style={styles.browseFile}
+                >
+                  Browse file
+                </Button>
+              )}
               <div style={styles.acceptedFile}>{props.acceptedFile?.name}</div>
               {props.acceptedFile?.name && (
-                <Button
+                <IconButton
                   variant="contained"
                   size="medium"
                   type="button"
@@ -116,8 +121,8 @@ export default function CSVReader() {
                     }
                   }}
                 >
-                  Remove
-                </Button>
+                  <CloseIcon />
+                </IconButton>
               )}
             </div>
           </>

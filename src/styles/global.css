@@ -15,6 +15,6 @@ body {
   --active-text-color: #f9fbff;
   --active-background-color: #3e6087;
 
-  --standard-transition: 0.3s ease;
+  --standard-transition: 0.3s ease-in-out;
   --action-button-color: #245b8f;
 }

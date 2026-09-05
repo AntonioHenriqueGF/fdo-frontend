@@ -22,13 +22,6 @@ export const headerLineSelectedSpreadAtom = atom(
   },
 );
 
-export const dataStartLineSelectedSpreadAtom = atom(
-  (get) => get(dataStartLineSelectedAtom),
-  (_get, set, newData: SetStateAction<number>) => {
-    set(dataStartLineSelectedAtom, newData);
-  },
-);
-
 export const deleteFileImportAtom = atom(
   (get) => get(csvImportRawAtom),
   (_get, set) => {

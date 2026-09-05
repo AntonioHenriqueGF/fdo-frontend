@@ -2,7 +2,6 @@ import { useAtom } from 'jotai';
 import { NumberField } from '../../../../shared/components/NumberField';
 import {
   csvImportAddSpreadAtom,
-  dataStartLineSelectedSpreadAtom,
   fileImportHashAtom,
   fileImportNameAtom,
   headerLineSelectedSpreadAtom,
@@ -10,7 +9,7 @@ import {
 import { UserCustomInputWrapper } from './styles';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { DataTypeDecider } from './DataTypeDecider';
-import { estimateHeaders, estimateDataStartLine } from './Props';
+import { estimateHeaders } from './Props';
 import type { DataType } from '../../interfaces/IParsingProfile';
 import { Button } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
@@ -26,9 +25,6 @@ export const UserCustomInput: React.FC = () => {
   const [headerLineSelected, setHeaderLineSelected] = useAtom(
     headerLineSelectedSpreadAtom,
   );
-  const [dataStartLineSelected, setDataStartLineSelected] = useAtom(
-    dataStartLineSelectedSpreadAtom,
-  );
   const [dataTypePicked, setDataTypePicked] = useState<DataType[]>([]);
   const [fileName] = useAtom(fileImportNameAtom);
   const [fileHash] = useAtom(fileImportHashAtom);
@@ -41,9 +37,6 @@ export const UserCustomInput: React.FC = () => {
   useEffect(() => {
     const estimatedHeader = estimateHeaders(csvImport?.data ?? []);
     setHeaderLineSelected(estimatedHeader);
-    setDataStartLineSelected(
-      estimateDataStartLine(csvImport?.data ?? [], estimatedHeader),
-    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [csvImport]);
 
@@ -68,7 +61,7 @@ export const UserCustomInput: React.FC = () => {
 
       if (
         !validateProfile({
-          dataLine: dataStartLineSelected,
+          dataLine: headerLineSelected + 1,
           columnTypeMappings: dataTypePicked,
         })
       ) {
@@ -81,7 +74,7 @@ export const UserCustomInput: React.FC = () => {
         url: '/api/import',
         data: {
           normalized: normalizeData(csvImport?.data, {
-            dataLine: dataStartLineSelected,
+            dataLine: headerLineSelected + 1,
             columnTypeMappings: dataTypePicked,
           }),
           fileName,
@@ -108,7 +101,7 @@ export const UserCustomInput: React.FC = () => {
     }
   }, [
     dataTypePicked,
-    dataStartLineSelected,
+    headerLineSelected,
     fileName,
     fileHash,
     csvImport?.data,
@@ -149,18 +142,18 @@ export const UserCustomInput: React.FC = () => {
           min={1}
           max={30}
           size="small"
-          label="Header start line"
+          label="Header line"
           value={headerLineSelected}
           onValueChange={(value) => setHeaderLineSelected(value ?? 1)}
         />
-        <NumberField
+        {/* <NumberField
           min={1}
           max={30}
           size="small"
           label="Data start line"
           value={dataStartLineSelected}
           onValueChange={(value) => setDataStartLineSelected(value ?? 1)}
-        />
+        /> */}
       </div>
       <div className="info-text">
         * Line numbers are 1-based, meaning the first line is considered line 1.
