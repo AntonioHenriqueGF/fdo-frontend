@@ -6,6 +6,12 @@ export const ImportListWrapper = styled.div`
   border-radius: 8px;
   background-color: var(--background-color, #f9f9f9);
 
+  .import-list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
   ul {
     list-style-type: none;
     padding: 0;

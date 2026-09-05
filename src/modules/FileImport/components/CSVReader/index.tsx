@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai';
 import { useAtomCallback } from 'jotai/utils';
-import { useCallback, type CSSProperties } from 'react';
+import { useCallback, useEffect, useRef, type CSSProperties } from 'react';
 
 import { useCSVReader } from 'react-papaparse';
 import {
@@ -53,8 +53,17 @@ const styles = {
 export default function CSVReader() {
   const { CSVReader } = useCSVReader();
   const { enqueueSnackbar } = useSnackbar();
+  const deleteButtonRef = useRef<HTMLButtonElement>(null);
 
-  const [, setCsvImport] = useAtom(csvImportAddSpreadAtom);
+  const [csvImport, setCsvImport] = useAtom(csvImportAddSpreadAtom);
+
+  useEffect(() => {
+    if (!csvImport) {
+      if (deleteButtonRef.current) {
+        deleteButtonRef.current.click();
+      }
+    }
+  }, [csvImport]);
 
   const handleUploadAccepted = useAtomCallback(
     useCallback(
@@ -111,6 +120,7 @@ export default function CSVReader() {
                   size="medium"
                   type="button"
                   color="error"
+                  ref={deleteButtonRef}
                   {...props.getRemoveFileProps()}
                   style={styles.remove}
                   onClick={(event: Event) => {

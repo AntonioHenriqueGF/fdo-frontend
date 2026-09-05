@@ -1,7 +1,8 @@
-import { useAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import { NumberField } from '../../../../shared/components/NumberField';
 import {
   csvImportAddSpreadAtom,
+  deleteFileImportAtom,
   fileImportHashAtom,
   fileImportNameAtom,
   headerLineSelectedSpreadAtom,
@@ -21,17 +22,27 @@ import {
 } from '../../../../Services/ApiRequest';
 import type { AxiosError } from 'axios';
 
+const DATA_TYPE_PICKED_STORAGE_KEY = 'fileImport.dataTypePicked';
+
 export const UserCustomInput: React.FC = () => {
   const [headerLineSelected, setHeaderLineSelected] = useAtom(
     headerLineSelectedSpreadAtom,
   );
-  const [dataTypePicked, setDataTypePicked] = useState<DataType[]>([]);
+  const [dataTypePicked, setDataTypePicked] = useState<DataType[]>(() => {
+    try {
+      const stored = localStorage.getItem(DATA_TYPE_PICKED_STORAGE_KEY);
+      return stored ? (JSON.parse(stored) as DataType[]) : [];
+    } catch {
+      return [];
+    }
+  });
   const [fileName] = useAtom(fileImportNameAtom);
   const [fileHash] = useAtom(fileImportHashAtom);
 
   const [submitting, setSubmitting] = useState(false);
 
   const [csvImport] = useAtom(csvImportAddSpreadAtom);
+  const deleteFileImport = useSetAtom(deleteFileImportAtom);
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
@@ -68,6 +79,11 @@ export const UserCustomInput: React.FC = () => {
         return;
       }
 
+      localStorage.setItem(
+        DATA_TYPE_PICKED_STORAGE_KEY,
+        JSON.stringify(dataTypePicked),
+      );
+
       setSubmitting(true);
       ApiRequest({
         method: 'POST',
@@ -82,6 +98,7 @@ export const UserCustomInput: React.FC = () => {
         },
         callback: () => {
           enqueueSnackbar('File import job started', { variant: 'info' });
+          deleteFileImport();
         },
         errorCallback: (error: AxiosError<StandardApiResponse<any>>) => {
           enqueueSnackbar(
@@ -106,6 +123,7 @@ export const UserCustomInput: React.FC = () => {
     fileHash,
     csvImport?.data,
     enqueueSnackbar,
+    deleteFileImport,
   ]);
 
   const headerRow = useMemo(() => {

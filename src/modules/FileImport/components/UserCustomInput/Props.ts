@@ -6,7 +6,11 @@
 export const estimateHeaders = (data: string[][]): number => {
   for (let i = 0; i < Math.min(30, data.length); i++) {
     const row = data[i];
-    if (row.every(cell => cell !== undefined && cell !== null && cell.trim() !== '')) {
+    if (
+      row.every(
+        (cell) => cell !== undefined && cell !== null && cell.trim() !== '',
+      )
+    ) {
       return i + 1; // Return 1-based index
     }
   }
@@ -19,10 +23,17 @@ export const estimateHeaders = (data: string[][]): number => {
  * @param headerLine The 1-based index of the header line, which is used as a reference point for finding the data start line.
  * @return The index of the estimated data start line, or headerLine + 1 if no such row is found. The index is 1-based.
  */
-export const estimateDataStartLine = (data: string[][], headerLine: number): number => {
+export const estimateDataStartLine = (
+  data: string[][],
+  headerLine: number,
+): number => {
   for (let i = headerLine; i < Math.min(headerLine + 30, data.length); i++) {
     const row = data[i];
-    if (row.filter(cell => cell !== undefined && cell !== null && cell.trim() !== '').length >= 3) {
+    if (
+      row.filter(
+        (cell) => cell !== undefined && cell !== null && cell.trim() !== '',
+      ).length >= 3
+    ) {
       return i + 1; // Return 1-based index
     }
   }
