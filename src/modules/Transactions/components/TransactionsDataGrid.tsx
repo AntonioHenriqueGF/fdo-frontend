@@ -1,4 +1,4 @@
-import { Alert, Box, Button } from '@mui/material';
+import { Alert, Box } from '@mui/material';
 import {
   DataGrid,
   type GridColDef,
@@ -7,6 +7,13 @@ import {
 } from '@mui/x-data-grid';
 import { useMemo } from 'react';
 import type { Transaction } from '../models/TransactionResponse';
+
+import { IconButton } from '../../../shared/components/IconButton';
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
+import CreateIcon from '@mui/icons-material/Create';
+import DeleteIcon from '@mui/icons-material/Delete';
+import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
+import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 
 interface TransactionsDataGridProps {
   rows: Transaction[];
@@ -97,49 +104,55 @@ export const TransactionsDataGrid: React.FC<TransactionsDataGridProps> = ({
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, mb: 1 }}>
-        <Button
+        <IconButton
           size="small"
           variant="contained"
           onClick={onCreateClick}
           disabled={loading}
+          tooltipTitle="Create Transaction"
         >
-          New
-        </Button>
-        <Button
+          <LibraryAddIcon />
+        </IconButton>
+        <IconButton
           size="small"
-          variant="outlined"
+          variant="contained"
           onClick={onEditClick}
           disabled={loading || !hasSelectedTransaction}
+          tooltipTitle="Edit Transaction"
+          color="warning"
         >
-          Edit
-        </Button>
-        <Button
+          <CreateIcon />
+        </IconButton>
+        <IconButton
           size="small"
           color="error"
-          variant="outlined"
+          variant="contained"
           onClick={onDeleteClick}
           disabled={loading || !hasSelectedTransaction}
+          tooltipTitle="Delete Transaction"
         >
-          Delete
-        </Button>
-        <Button
+          <DeleteIcon />
+        </IconButton>
+        <IconButton
           size="small"
-          variant="outlined"
+          variant="contained"
           onClick={goToFirstPage}
           disabled={loading || paginationModel.page === 0}
+          tooltipTitle="First Page"
         >
-          First page
-        </Button>
-        <Button
+          <KeyboardDoubleArrowLeftIcon />
+        </IconButton>
+        <IconButton
           size="small"
-          variant="outlined"
+          variant="contained"
           onClick={goToLastPage}
           disabled={
             loading || paginationModel.page >= totalPages - 1 || totalRows === 0
           }
+          tooltipTitle="Last Page"
         >
-          Last page
-        </Button>
+          <KeyboardDoubleArrowRightIcon />
+        </IconButton>
       </Box>
       <DataGrid
         rows={rows}

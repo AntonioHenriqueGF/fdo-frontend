@@ -4,8 +4,9 @@ import {
   type StandardApiResponse,
 } from '../../../../Services/ApiRequest';
 import type { IImport } from '../../interfaces/IImport';
-import { Button } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { ImportListWrapper } from './styles';
+import { IconButton } from '../../../../shared/components/IconButton';
 
 export const ImportList: React.FC = () => {
   const [imports, setImports] = useState<IImport[]>([]);
@@ -31,10 +32,11 @@ export const ImportList: React.FC = () => {
               <p>
                 {imp.imp_file_name} - {imp.imp_imported_at}
               </p>
-              <Button
+              <IconButton
                 variant="contained"
                 color="error"
                 style={{ marginLeft: 'auto' }}
+                tooltipTitle="Delete Import"
                 onClick={() => {
                   if (
                     window.confirm(
@@ -53,8 +55,8 @@ export const ImportList: React.FC = () => {
                   }
                 }}
               >
-                Delete
-              </Button>
+                <DeleteIcon />
+              </IconButton>
             </div>
           </li>
         ))}

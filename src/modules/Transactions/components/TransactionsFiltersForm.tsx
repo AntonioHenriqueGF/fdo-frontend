@@ -1,6 +1,8 @@
-import { Box, Button, MenuItem, TextField } from '@mui/material';
+import { Box, MenuItem, TextField } from '@mui/material';
 import { useMemo } from 'react';
 import type { Category } from '../../Categories/models/Categories';
+import { IconButton } from '../../../shared/components/IconButton';
+import SearchIcon from '@mui/icons-material/Search';
 
 interface TransactionsFiltersFormProps {
   categories: Category[];
@@ -12,11 +14,9 @@ interface TransactionsFiltersFormProps {
   }) => void;
 }
 
-export const TransactionsFiltersForm: React.FC<TransactionsFiltersFormProps> = ({
-  categories,
-  loadingCategories,
-  onSubmit,
-}) => {
+export const TransactionsFiltersForm: React.FC<
+  TransactionsFiltersFormProps
+> = ({ categories, loadingCategories, onSubmit }) => {
   const categoryOptions = useMemo(() => {
     return [
       { value: '', label: 'All Categories' },
@@ -39,8 +39,18 @@ export const TransactionsFiltersForm: React.FC<TransactionsFiltersFormProps> = (
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ display: 'grid', gap: 2, mb: 3 }}>
-      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(4, 1fr)' }, gap: 2 }}>
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{ display: 'grid', gap: 2, mb: 3 }}
+    >
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: { xs: '1fr', md: 'repeat(4, 1fr)' },
+          gap: 2,
+        }}
+      >
         <TextField
           select
           label="Category"
@@ -76,9 +86,14 @@ export const TransactionsFiltersForm: React.FC<TransactionsFiltersFormProps> = (
         />
 
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Button type="submit" variant="contained" fullWidth>
-            Search
-          </Button>
+          <IconButton
+            type="submit"
+            variant="contained"
+            color="primary"
+            tooltipTitle="Search"
+          >
+            <SearchIcon />
+          </IconButton>
         </Box>
       </Box>
     </Box>

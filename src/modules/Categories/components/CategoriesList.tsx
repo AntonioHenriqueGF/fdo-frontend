@@ -1,6 +1,11 @@
 import React, { useCallback, useState } from 'react';
 import { CategoryListStyles } from '../views/styles';
-import { Button, IconButton, TextField } from '@mui/material';
+import {
+  Button,
+  IconButton as MuiIconButton,
+  TextField,
+  Tooltip,
+} from '@mui/material';
 
 import LabelIcon from '@mui/icons-material/Label';
 import AddIcon from '@mui/icons-material/Add';
@@ -20,6 +25,7 @@ import { useSnackbar } from 'notistack';
 import type { Rule } from '../models/Rules';
 import { Loading } from '../../../shared/components/Loading';
 import { RulesList } from './RulesList';
+import { IconButton } from '../../../shared/components/IconButton';
 
 interface CategoriesListProps {
   categories: CategoryList[];
@@ -270,44 +276,57 @@ export const CategoriesList: React.FC<CategoriesListProps> = ({
                   )}
                 </div>
                 <div className="category-item-buttons item-buttons">
-                  <IconButton
-                    color={category.cat_is_income ? 'warning' : 'inherit'}
-                    size="small"
-                    onClick={() =>
-                      toggleIncomeStatus(
-                        category.cat_id,
-                        !!category.cat_is_income,
-                      )
+                  <Tooltip
+                    title={
+                      category.cat_is_income
+                        ? 'Mark as Expense'
+                        : 'Mark as Income'
                     }
-                    loading={loadingToggleIncome[category.cat_id] ?? false}
+                    placement="top"
+                    arrow
                   >
-                    <MonetizationOnIcon />
-                  </IconButton>
-                  <Button
+                    <MuiIconButton
+                      color={category.cat_is_income ? 'warning' : 'inherit'}
+                      size="small"
+                      onClick={() =>
+                        toggleIncomeStatus(
+                          category.cat_id,
+                          !!category.cat_is_income,
+                        )
+                      }
+                      loading={loadingToggleIncome[category.cat_id] ?? false}
+                    >
+                      <MonetizationOnIcon />
+                    </MuiIconButton>
+                  </Tooltip>
+                  <IconButton
                     color="primary"
                     variant="contained"
                     size="small"
                     onClick={() => toggleRulesMode(category)}
+                    tooltipTitle={showRules ? 'Close Rules' : 'Show Rules'}
                   >
                     {showRules ? <CloseIcon /> : <RuleIcon />}
-                  </Button>
-                  <Button
+                  </IconButton>
+                  <IconButton
                     color="warning"
                     variant="contained"
                     size="small"
                     onClick={() => toggleEditMode(category.cat_id)}
+                    tooltipTitle={isEditing ? 'Close Edit' : 'Edit Category'}
                   >
                     {isEditing ? <CloseIcon /> : <EditIcon />}
-                  </Button>
-                  <Button
+                  </IconButton>
+                  <IconButton
                     color="error"
                     variant="contained"
                     size="small"
                     onClick={() => handleDeleteCategory(category.cat_id)}
                     loading={deleting}
+                    tooltipTitle="Delete Category"
                   >
                     <DeleteIcon />
-                  </Button>
+                  </IconButton>
                 </div>
               </li>
               {showRules && (

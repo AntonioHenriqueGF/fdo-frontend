@@ -1,7 +1,19 @@
-import { Alert, Box, Button } from '@mui/material';
-import { DataGrid, type GridColDef, type GridPaginationModel, type GridRowSelectionModel } from '@mui/x-data-grid';
+import { Alert, Box } from '@mui/material';
+import {
+  DataGrid,
+  type GridColDef,
+  type GridPaginationModel,
+  type GridRowSelectionModel,
+} from '@mui/x-data-grid';
 import { useMemo } from 'react';
 import type { DailyBalance } from '../models/DailyBalance';
+
+import { IconButton } from '../../../shared/components/IconButton';
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
+import CreateIcon from '@mui/icons-material/Create';
+import DeleteIcon from '@mui/icons-material/Delete';
+import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
+import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 
 interface DailyBalancesDataGridProps {
   rows: DailyBalance[];
@@ -30,7 +42,10 @@ export const DailyBalancesDataGrid: React.FC<DailyBalancesDataGridProps> = ({
   onEditClick,
   onDeleteClick,
 }) => {
-  const totalPages = Math.max(1, Math.ceil(totalRows / paginationModel.pageSize));
+  const totalPages = Math.max(
+    1,
+    Math.ceil(totalRows / paginationModel.pageSize),
+  );
   const hasSelectedDailyBalance = selectedDailyBalanceId !== null;
   const rowSelectionModel: GridRowSelectionModel = {
     type: 'include',
@@ -75,47 +90,55 @@ export const DailyBalancesDataGrid: React.FC<DailyBalancesDataGridProps> = ({
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, mb: 1 }}>
-        <Button
+        <IconButton
           size="small"
           variant="contained"
           onClick={onCreateClick}
           disabled={loading}
+          tooltipTitle="Create Daily Balance"
         >
-          New
-        </Button>
-        <Button
+          <LibraryAddIcon />
+        </IconButton>
+        <IconButton
           size="small"
-          variant="outlined"
+          variant="contained"
           onClick={onEditClick}
           disabled={loading || !hasSelectedDailyBalance}
+          tooltipTitle="Edit Daily Balance"
+          color="warning"
         >
-          Edit
-        </Button>
-        <Button
+          <CreateIcon />
+        </IconButton>
+        <IconButton
           size="small"
           color="error"
-          variant="outlined"
+          variant="contained"
           onClick={onDeleteClick}
           disabled={loading || !hasSelectedDailyBalance}
+          tooltipTitle="Delete Daily Balance"
         >
-          Delete
-        </Button>
-        <Button
+          <DeleteIcon />
+        </IconButton>
+        <IconButton
           size="small"
-          variant="outlined"
+          variant="contained"
           onClick={goToFirstPage}
           disabled={loading || paginationModel.page === 0}
+          tooltipTitle="First Page"
         >
-          First page
-        </Button>
-        <Button
+          <KeyboardDoubleArrowLeftIcon />
+        </IconButton>
+        <IconButton
           size="small"
-          variant="outlined"
+          variant="contained"
           onClick={goToLastPage}
-          disabled={loading || paginationModel.page >= totalPages - 1 || totalRows === 0}
+          disabled={
+            loading || paginationModel.page >= totalPages - 1 || totalRows === 0
+          }
+          tooltipTitle="Last Page"
         >
-          Last page
-        </Button>
+          <KeyboardDoubleArrowRightIcon />
+        </IconButton>
       </Box>
       <DataGrid
         rows={rows}
@@ -128,7 +151,9 @@ export const DailyBalancesDataGrid: React.FC<DailyBalancesDataGridProps> = ({
         rowSelectionModel={rowSelectionModel}
         onRowSelectionModelChange={(selectionModel) => {
           const firstSelection = selectionModel.ids.values().next().value;
-          onSelectDailyBalance(typeof firstSelection === 'number' ? firstSelection : null);
+          onSelectDailyBalance(
+            typeof firstSelection === 'number' ? firstSelection : null,
+          );
         }}
         keepNonExistentRowsSelected={false}
         paginationModel={paginationModel}

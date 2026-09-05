@@ -14,6 +14,7 @@ import { ContentWrapper } from './styles';
 import { Loading } from '../../../shared/components/Loading';
 import type { Category, CategoryList } from '../models/Categories';
 import { CategoriesList } from '../components/CategoriesList';
+import { IconButton } from '../../../shared/components/IconButton';
 
 export const Categories: React.FC = () => {
   const [categories, setCategories] = useState<CategoryList[]>([]);
@@ -110,15 +111,15 @@ export const Categories: React.FC = () => {
               variant="standard"
               required
             />
-            <Button
+            <IconButton
               type="submit"
               variant="contained"
               color="primary"
-              startIcon={<AddIcon />}
+              tooltipTitle="Add Category"
               size="small"
             >
-              Add Category
-            </Button>
+              <AddIcon />
+            </IconButton>
           </form>
           <Button
             className="reprocessButton"

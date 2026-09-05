@@ -1,16 +1,14 @@
-import { Box, Button, TextField } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 
 interface DailyBalancesFiltersFormProps {
-  onSubmit: (filters: {
-    date_start: string;
-    date_end: string;
-  }) => void;
+  onSubmit: (filters: { date_start: string; date_end: string }) => void;
 }
+import SearchIcon from '@mui/icons-material/Search';
+import { IconButton } from '../../../shared/components/IconButton';
 
-export const DailyBalancesFiltersForm: React.FC<DailyBalancesFiltersFormProps> = ({
-  onSubmit,
-}) => {
-
+export const DailyBalancesFiltersForm: React.FC<
+  DailyBalancesFiltersFormProps
+> = ({ onSubmit }) => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -22,8 +20,18 @@ export const DailyBalancesFiltersForm: React.FC<DailyBalancesFiltersFormProps> =
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ display: 'grid', gap: 2, mb: 3 }}>
-      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(4, 1fr)' }, gap: 2 }}>
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{ display: 'grid', gap: 2, mb: 3 }}
+    >
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: { xs: '1fr', md: 'repeat(4, 1fr)' },
+          gap: 2,
+        }}
+      >
         <TextField
           label="Start Date"
           type="date"
@@ -43,9 +51,14 @@ export const DailyBalancesFiltersForm: React.FC<DailyBalancesFiltersFormProps> =
         />
 
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Button type="submit" variant="contained" fullWidth>
-            Search
-          </Button>
+          <IconButton
+            type="submit"
+            variant="contained"
+            color="primary"
+            tooltipTitle="Search"
+          >
+            <SearchIcon />
+          </IconButton>
         </Box>
       </Box>
     </Box>
