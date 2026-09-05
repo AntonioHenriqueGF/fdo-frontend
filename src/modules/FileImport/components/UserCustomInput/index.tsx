@@ -164,17 +164,11 @@ export const UserCustomInput: React.FC = () => {
           value={headerLineSelected}
           onValueChange={(value) => setHeaderLineSelected(value ?? 1)}
         />
-        {/* <NumberField
-          min={1}
-          max={30}
-          size="small"
-          label="Data start line"
-          value={dataStartLineSelected}
-          onValueChange={(value) => setDataStartLineSelected(value ?? 1)}
-        /> */}
       </div>
       <div className="info-text">
-        * Line numbers are 1-based, meaning the first line is considered line 1.
+        Below, you can define what each columns of the selected CSV "Header
+        line" (defined above) represents. For each select field, choose the
+        appropriate data type that corresponds to the column in the CSV file.
       </div>
       {dataDecider}
       <Button
