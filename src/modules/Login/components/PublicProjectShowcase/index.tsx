@@ -45,6 +45,7 @@ export const PublicProjectShowcase: React.FC = () => {
         <span>React</span>
         <span>TypeScript</span>
         <span>Vite</span>
+        <span>Vitest</span>
         <span>Material UI</span>
         <span>Laravel Echo</span>
         <span>Laravel</span>
