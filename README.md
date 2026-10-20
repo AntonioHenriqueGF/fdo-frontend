@@ -93,6 +93,7 @@ In production the SPA is built into static files and served by an Nginx containe
 | Dates | date-fns 4.4 | Period presets and date formatting |
 | Feedback | notistack 3 | Toast notifications |
 | Tooling | ESLint 9, Prettier 3 | Linting and formatting |
+| Testing | Vitest 5 | Unit tests |
 | Delivery | Docker, Nginx, Certbot | Static hosting and TLS certificates |
 
 ## Getting started
@@ -132,7 +133,16 @@ npm run build     # type-check and build to dist/
 npm run preview   # serve the production build locally
 npm run lint      # ESLint
 npm run format    # Prettier
+npm test          # Vitest in watch mode (npx vitest run for a single run)
 ```
+
+### Tests
+
+Unit tests use [Vitest](https://vitest.dev/) and sit next to the code they cover, named `*.test.ts`. The suite is still small and will grow over time.
+
+Current coverage:
+
+- **CSV normalization** ([`dataNormalization.test.ts`](src/modules/FileImport/utils/dataNormalization.test.ts)): header skipping from the chosen data line, ignored and unmapped columns, the three date formats, amounts in `3.000,00` and `3,000.00` style, truncation of text to 255 characters, empty input, and detection of an empty trailing row
 
 ### Development with Docker
 
@@ -205,6 +215,8 @@ src/
 └── assets/               # Logo and images
 ```
 
+Tests are co-located with the code they cover (`*.test.ts`).
+
 ### Routes
 
 | Path | Access | Screen |
@@ -220,7 +232,7 @@ src/
 ## Roadmap
 
 - **XLSX import:** accept Excel statements in addition to CSV
-- **Automated tests:** unit and component tests with Vitest + Testing Library
+- **More automated tests:** extend the Vitest unit suite (started with CSV normalization) and add component tests with Testing Library
 
 ## Related repositories
 

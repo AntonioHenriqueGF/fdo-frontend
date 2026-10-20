@@ -93,6 +93,7 @@ Em produção, a SPA é compilada em arquivos estáticos servidos por um contêi
 | Datas | date-fns 4.4 | Períodos predefinidos e formatação de datas |
 | Feedback | notistack 3 | Notificações em toast |
 | Ferramentas | ESLint 9, Prettier 3 | Lint e formatação |
+| Testes | Vitest 5 | Testes unitários |
 | Entrega | Docker, Nginx, Certbot | Hospedagem estática e certificados TLS |
 
 ## Como começar
@@ -132,7 +133,16 @@ npm run build     # type-check and build to dist/
 npm run preview   # serve the production build locally
 npm run lint      # ESLint
 npm run format    # Prettier
+npm test          # Vitest in watch mode (npx vitest run for a single run)
 ```
+
+### Testes
+
+Os testes unitários usam o [Vitest](https://vitest.dev/) e ficam ao lado do código que cobrem, com o nome `*.test.ts`. A suíte ainda é pequena e vai crescer com o tempo.
+
+Cobertura atual:
+
+- **Normalização do CSV** ([`dataNormalization.test.ts`](src/modules/FileImport/utils/dataNormalization.test.ts)): descarte do cabeçalho a partir da linha de dados escolhida, colunas ignoradas e sem mapeamento, os três formatos de data, valores no estilo `3.000,00` e `3,000.00`, corte de textos em 255 caracteres, entrada vazia e detecção de linha final vazia
 
 ### Desenvolvimento com Docker
 
@@ -205,6 +215,8 @@ src/
 └── assets/               # Logo and images
 ```
 
+Os testes ficam junto do código que cobrem (`*.test.ts`).
+
 ### Rotas
 
 | Caminho | Acesso | Tela |
@@ -220,7 +232,7 @@ src/
 ## Roadmap
 
 - **Importação de XLSX:** aceitar extratos em Excel além de CSV
-- **Testes automatizados:** testes unitários e de componentes com Vitest + Testing Library
+- **Mais testes automatizados:** ampliar a suíte unitária com Vitest (iniciada pela normalização do CSV) e adicionar testes de componentes com Testing Library
 
 ## Repositórios relacionados
 
