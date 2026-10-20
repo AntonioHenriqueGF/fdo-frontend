@@ -121,7 +121,7 @@ export const UserCustomInput: React.FC = () => {
     headerLineSelected,
     fileName,
     fileHash,
-    csvImport?.data,
+    csvImport,
     enqueueSnackbar,
     deleteFileImport,
   ]);

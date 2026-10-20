@@ -8,7 +8,12 @@ interface DataTypeDeciderProps {
   identifier: number;
 }
 
-export const DataTypeDecider: React.FC<DataTypeDeciderProps> = ({ colName, value, onTypeSelected, identifier }) => {
+export const DataTypeDecider: React.FC<DataTypeDeciderProps> = ({
+  colName,
+  value,
+  onTypeSelected,
+  identifier,
+}) => {
   const handleChange = (
     event:
       | React.ChangeEvent<
@@ -16,19 +21,24 @@ export const DataTypeDecider: React.FC<DataTypeDeciderProps> = ({ colName, value
             value: string;
           },
           Element
-      >
+        >
       | (Event & {
-        target: {
-          value: string;
-          name: string;
-        };
-      }),
+          target: {
+            value: string;
+            name: string;
+          };
+        }),
   ) => {
     onTypeSelected((event.target.value || 'ignore') as DataType, identifier);
   };
   return (
     <FormControl fullWidth size="small" key={`form-control-${identifier}`}>
-      <InputLabel id={`col-selector-data-type-label-${identifier}`} key={`label-${identifier}`}>{colName}</InputLabel>
+      <InputLabel
+        id={`col-selector-data-type-label-${identifier}`}
+        key={`label-${identifier}`}
+      >
+        {colName}
+      </InputLabel>
       <Select
         labelId={`col-selector-data-type-label-${identifier}`}
         id={`col-selector-data-type-${identifier}`}
