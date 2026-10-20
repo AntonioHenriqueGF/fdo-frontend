@@ -25,30 +25,36 @@ _Screenshots coming soon. In the meantime, try the [live demo](https://api.anton
 ## Features
 
 **Authentication**
+
 - Login and registration with Laravel Sanctum cookie-based sessions
 - Route loaders that keep guests out of the dashboard and send signed-in users to it
 
 **Statement import (CSV)**
+
 - Client-side CSV parsing with a preview of the raw rows
 - Automatic header-row detection that the user can override
 - Per-column type mapping: three date formats (`MM/DD/YYYY`, `DD/MM/YYYY`, `YYYY-MM-DD`), description, single signed amount, separate credit/debit columns, closing balance, or ignore
 - History of previous imports, with deletion
 
 **Categories and rules**
+
 - Category CRUD, with a flag that marks a category as income
 - Rules per category (text pattern + priority) that classify transactions automatically
 - One-click reprocessing that re-applies every rule to existing transactions
 
 **Transactions and daily balances**
+
 - Full CRUD for both
 - Server-side pagination
 - Filters by date range, plus by category for transactions
 
 **Dashboard**
+
 - Monthly or daily granularity, with period presets (1M, 3M, 6M, 1Y, 2Y, ALL) and a multi-select category filter
 - Closing balance (line chart), net transactions per period, categories per period (income above zero, expenses below) and totals by category (bar charts), built with MUI X Charts
 
 **Real-time job notifications**
+
 - Imports and rule reprocessing run as background jobs; the UI shows toasts when a job starts, completes or fails
 
 ## Technical highlights
@@ -77,24 +83,24 @@ In production the SPA is built into static files and served by an Nginx containe
 
 ## Tech stack
 
-| Layer | Technology | Purpose |
-| --- | --- | --- |
-| Language | TypeScript 6.0 | Static typing across the codebase |
-| UI | React 19.2 | Component model and rendering |
-| Build | Vite 8 | Dev server and production bundling |
-| Routing | React Router 7.14 | Data router with auth loaders |
-| Components | Material UI (MUI) 9, Base UI 1.4 | UI components and theming |
+| Layer        | Technology                            | Purpose                               |
+| ------------ | ------------------------------------- | ------------------------------------- |
+| Language     | TypeScript 6.0                        | Static typing across the codebase     |
+| UI           | React 19.2                            | Component model and rendering         |
+| Build        | Vite 8                                | Dev server and production bundling    |
+| Routing      | React Router 7.14                     | Data router with auth loaders         |
+| Components   | Material UI (MUI) 9, Base UI 1.4      | UI components and theming             |
 | Data display | MUI X Data Grid 9.9, MUI X Charts 9.6 | Paginated tables and dashboard charts |
-| Styling | styled-components 6, Emotion 11 | Component-scoped styles |
-| State | Jotai 2.19 | Feature-scoped atoms |
-| HTTP | Axios 1.17 | API client with credentials and XSRF |
-| Real time | Laravel Echo 2.3, pusher-js 8.5 | Reverb WebSocket subscription |
-| CSV | react-papaparse 4.4, PapaParse 5.5 | In-browser CSV parsing |
-| Dates | date-fns 4.4 | Period presets and date formatting |
-| Feedback | notistack 3 | Toast notifications |
-| Tooling | ESLint 9, Prettier 3 | Linting and formatting |
-| Testing | Vitest 5 | Unit tests |
-| Delivery | Docker, Nginx, Certbot | Static hosting and TLS certificates |
+| Styling      | styled-components 6, Emotion 11       | Component-scoped styles               |
+| State        | Jotai 2.19                            | Feature-scoped atoms                  |
+| HTTP         | Axios 1.17                            | API client with credentials and XSRF  |
+| Real time    | Laravel Echo 2.3, pusher-js 8.5       | Reverb WebSocket subscription         |
+| CSV          | react-papaparse 4.4, PapaParse 5.5    | In-browser CSV parsing                |
+| Dates        | date-fns 4.4                          | Period presets and date formatting    |
+| Feedback     | notistack 3                           | Toast notifications                   |
+| Tooling      | ESLint 9, Prettier 3                  | Linting and formatting                |
+| Testing      | Vitest 5                              | Unit tests                            |
+| Delivery     | Docker, Nginx, Certbot                | Static hosting and TLS certificates   |
 
 ## Getting started
 
@@ -110,13 +116,13 @@ In production the SPA is built into static files and served by an Nginx containe
 
 Copy `example.env` to `.env` and fill in the values. Vite inlines them at build time, so rebuild after changing them.
 
-| Name | Description | Example |
-| --- | --- | --- |
-| `VITE_BACKEND_URL` | Base URL of fdo-api (REST, Sanctum and broadcasting auth) | `http://localhost:8000` |
-| `VITE_REVERB_APP_KEY` | Reverb application key (matches the API's `REVERB_APP_KEY`) | `your-reverb-app-key` |
-| `VITE_REVERB_HOST` | Host of the Reverb WebSocket server | `localhost` |
-| `VITE_REVERB_PORT` | Port of the Reverb WebSocket server | `8080` |
-| `VITE_REVERB_SCHEME` | `https` forces TLS (`wss`); anything else uses `ws` | `http` |
+| Name                  | Description                                                 | Example                 |
+| --------------------- | ----------------------------------------------------------- | ----------------------- |
+| `VITE_BACKEND_URL`    | Base URL of fdo-api (REST, Sanctum and broadcasting auth)   | `http://localhost:8000` |
+| `VITE_REVERB_APP_KEY` | Reverb application key (matches the API's `REVERB_APP_KEY`) | `your-reverb-app-key`   |
+| `VITE_REVERB_HOST`    | Host of the Reverb WebSocket server                         | `localhost`             |
+| `VITE_REVERB_PORT`    | Port of the Reverb WebSocket server                         | `8080`                  |
+| `VITE_REVERB_SCHEME`  | `https` forces TLS (`wss`); anything else uses `ws`         | `http`                  |
 
 ### Local development (Node)
 
@@ -219,15 +225,15 @@ Tests are co-located with the code they cover (`*.test.ts`).
 
 ### Routes
 
-| Path | Access | Screen |
-| --- | --- | --- |
-| `/login` | Guest | Login |
-| `/signin` | Guest | Registration |
-| `/dashboard` | Authenticated | Dashboard charts |
-| `/dashboard/statement-import` | Authenticated | CSV import |
-| `/dashboard/categories` | Authenticated | Categories and rules |
-| `/dashboard/transactions` | Authenticated | Transactions |
-| `/dashboard/daily-balances` | Authenticated | Daily balances |
+| Path                          | Access        | Screen               |
+| ----------------------------- | ------------- | -------------------- |
+| `/login`                      | Guest         | Login                |
+| `/signup`                     | Guest         | Registration         |
+| `/dashboard`                  | Authenticated | Dashboard charts     |
+| `/dashboard/statement-import` | Authenticated | CSV import           |
+| `/dashboard/categories`       | Authenticated | Categories and rules |
+| `/dashboard/transactions`     | Authenticated | Transactions         |
+| `/dashboard/daily-balances`   | Authenticated | Daily balances       |
 
 ## Roadmap
 

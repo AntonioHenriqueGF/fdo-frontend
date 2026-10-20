@@ -25,30 +25,36 @@ _Capturas de tela em breve. Enquanto isso, experimente a [demo online](https://a
 ## Funcionalidades
 
 **Autenticação**
+
 - Login e cadastro com sessões baseadas em cookie do Laravel Sanctum
 - Loaders de rota que mantêm visitantes fora do dashboard e levam usuários autenticados até ele
 
 **Importação de extratos (CSV)**
+
 - Leitura do CSV no navegador, com prévia das linhas brutas
 - Detecção automática da linha de cabeçalho, que o usuário pode corrigir
 - Mapeamento de tipo por coluna: três formatos de data (`MM/DD/YYYY`, `DD/MM/YYYY`, `YYYY-MM-DD`), descrição, valor único com sinal, colunas separadas de crédito/débito, saldo final ou ignorar
 - Histórico das importações anteriores, com exclusão
 
 **Categorias e regras**
+
 - CRUD de categorias, com uma opção que marca a categoria como receita
 - Regras por categoria (padrão de texto + prioridade) que classificam as transações automaticamente
 - Reprocessamento com um clique, que reaplica todas as regras às transações existentes
 
 **Transações e saldos diários**
+
 - CRUD completo para ambos
 - Paginação no servidor
 - Filtros por intervalo de datas e, nas transações, também por categoria
 
 **Dashboard**
+
 - Granularidade mensal ou diária, com períodos predefinidos (1M, 3M, 6M, 1Y, 2Y, ALL) e filtro de múltiplas categorias
 - Saldo final (gráfico de linha), transações líquidas por período, categorias por período (receitas acima de zero, despesas abaixo) e totais por categoria (gráficos de barras), feitos com MUI X Charts
 
 **Notificações de jobs em tempo real**
+
 - Importações e reprocessamento de regras rodam como jobs em segundo plano; a interface mostra toasts quando um job inicia, conclui ou falha
 
 ## Destaques técnicos
@@ -77,24 +83,24 @@ Em produção, a SPA é compilada em arquivos estáticos servidos por um contêi
 
 ## Stack
 
-| Camada | Tecnologia | Para quê |
-| --- | --- | --- |
-| Linguagem | TypeScript 6.0 | Tipagem estática em todo o código |
-| UI | React 19.2 | Modelo de componentes e renderização |
-| Build | Vite 8 | Servidor de desenvolvimento e bundle de produção |
-| Roteamento | React Router 7.14 | Data router com loaders de autenticação |
-| Componentes | Material UI (MUI) 9, Base UI 1.4 | Componentes de interface e tema |
-| Exibição de dados | MUI X Data Grid 9.9, MUI X Charts 9.6 | Tabelas paginadas e gráficos do dashboard |
-| Estilização | styled-components 6, Emotion 11 | Estilos com escopo por componente |
-| Estado | Jotai 2.19 | Átomos por funcionalidade |
-| HTTP | Axios 1.17 | Cliente da API com credenciais e XSRF |
-| Tempo real | Laravel Echo 2.3, pusher-js 8.5 | Inscrição no WebSocket do Reverb |
-| CSV | react-papaparse 4.4, PapaParse 5.5 | Leitura de CSV no navegador |
-| Datas | date-fns 4.4 | Períodos predefinidos e formatação de datas |
-| Feedback | notistack 3 | Notificações em toast |
-| Ferramentas | ESLint 9, Prettier 3 | Lint e formatação |
-| Testes | Vitest 5 | Testes unitários |
-| Entrega | Docker, Nginx, Certbot | Hospedagem estática e certificados TLS |
+| Camada            | Tecnologia                            | Para quê                                         |
+| ----------------- | ------------------------------------- | ------------------------------------------------ |
+| Linguagem         | TypeScript 6.0                        | Tipagem estática em todo o código                |
+| UI                | React 19.2                            | Modelo de componentes e renderização             |
+| Build             | Vite 8                                | Servidor de desenvolvimento e bundle de produção |
+| Roteamento        | React Router 7.14                     | Data router com loaders de autenticação          |
+| Componentes       | Material UI (MUI) 9, Base UI 1.4      | Componentes de interface e tema                  |
+| Exibição de dados | MUI X Data Grid 9.9, MUI X Charts 9.6 | Tabelas paginadas e gráficos do dashboard        |
+| Estilização       | styled-components 6, Emotion 11       | Estilos com escopo por componente                |
+| Estado            | Jotai 2.19                            | Átomos por funcionalidade                        |
+| HTTP              | Axios 1.17                            | Cliente da API com credenciais e XSRF            |
+| Tempo real        | Laravel Echo 2.3, pusher-js 8.5       | Inscrição no WebSocket do Reverb                 |
+| CSV               | react-papaparse 4.4, PapaParse 5.5    | Leitura de CSV no navegador                      |
+| Datas             | date-fns 4.4                          | Períodos predefinidos e formatação de datas      |
+| Feedback          | notistack 3                           | Notificações em toast                            |
+| Ferramentas       | ESLint 9, Prettier 3                  | Lint e formatação                                |
+| Testes            | Vitest 5                              | Testes unitários                                 |
+| Entrega           | Docker, Nginx, Certbot                | Hospedagem estática e certificados TLS           |
 
 ## Como começar
 
@@ -110,13 +116,13 @@ Em produção, a SPA é compilada em arquivos estáticos servidos por um contêi
 
 Copie `example.env` para `.env` e preencha os valores. O Vite embute as variáveis no momento do build, então gere o build de novo depois de alterá-las.
 
-| Nome | Descrição | Exemplo |
-| --- | --- | --- |
-| `VITE_BACKEND_URL` | URL base do fdo-api (REST, Sanctum e autorização de broadcasting) | `http://localhost:8000` |
-| `VITE_REVERB_APP_KEY` | Chave da aplicação Reverb (igual ao `REVERB_APP_KEY` da API) | `your-reverb-app-key` |
-| `VITE_REVERB_HOST` | Host do servidor WebSocket do Reverb | `localhost` |
-| `VITE_REVERB_PORT` | Porta do servidor WebSocket do Reverb | `8080` |
-| `VITE_REVERB_SCHEME` | `https` força TLS (`wss`); qualquer outro valor usa `ws` | `http` |
+| Nome                  | Descrição                                                         | Exemplo                 |
+| --------------------- | ----------------------------------------------------------------- | ----------------------- |
+| `VITE_BACKEND_URL`    | URL base do fdo-api (REST, Sanctum e autorização de broadcasting) | `http://localhost:8000` |
+| `VITE_REVERB_APP_KEY` | Chave da aplicação Reverb (igual ao `REVERB_APP_KEY` da API)      | `your-reverb-app-key`   |
+| `VITE_REVERB_HOST`    | Host do servidor WebSocket do Reverb                              | `localhost`             |
+| `VITE_REVERB_PORT`    | Porta do servidor WebSocket do Reverb                             | `8080`                  |
+| `VITE_REVERB_SCHEME`  | `https` força TLS (`wss`); qualquer outro valor usa `ws`          | `http`                  |
 
 ### Desenvolvimento local (Node)
 
@@ -219,15 +225,15 @@ Os testes ficam junto do código que cobrem (`*.test.ts`).
 
 ### Rotas
 
-| Caminho | Acesso | Tela |
-| --- | --- | --- |
-| `/login` | Visitante | Login |
-| `/signin` | Visitante | Cadastro |
-| `/dashboard` | Autenticado | Gráficos do dashboard |
-| `/dashboard/statement-import` | Autenticado | Importação de CSV |
-| `/dashboard/categories` | Autenticado | Categorias e regras |
-| `/dashboard/transactions` | Autenticado | Transações |
-| `/dashboard/daily-balances` | Autenticado | Saldos diários |
+| Caminho                       | Acesso      | Tela                  |
+| ----------------------------- | ----------- | --------------------- |
+| `/login`                      | Visitante   | Login                 |
+| `/signup`                     | Visitante   | Cadastro              |
+| `/dashboard`                  | Autenticado | Gráficos do dashboard |
+| `/dashboard/statement-import` | Autenticado | Importação de CSV     |
+| `/dashboard/categories`       | Autenticado | Categorias e regras   |
+| `/dashboard/transactions`     | Autenticado | Transações            |
+| `/dashboard/daily-balances`   | Autenticado | Saldos diários        |
 
 ## Roadmap
 

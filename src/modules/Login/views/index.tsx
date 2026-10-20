@@ -97,7 +97,7 @@ export const LoginView: React.FC = () => {
             <button
               className="mode-switch-link"
               type="button"
-              onClick={() => navigate('/signin')}
+              onClick={() => navigate('/signup')}
               disabled={loading}
             >
               Don't have an account? Create one now
